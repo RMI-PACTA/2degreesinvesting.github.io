@@ -13,6 +13,7 @@ output:
     toc: true
     toc_depth: 3
     self_contained: true
+preview: preview.jpg
 categories:
   - r2dii
   - package
