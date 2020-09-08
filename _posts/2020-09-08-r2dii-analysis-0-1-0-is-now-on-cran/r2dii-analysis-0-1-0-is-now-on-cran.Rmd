@@ -68,7 +68,7 @@ match_result %>%
   target_sda(ald_demo, co2_intensity_scenario_demo)
 ```
 
-We have also added the parameter `weight_production` to `target_market_share()`. This allows you to choose between outputting production values, weighted by relative loan size (`weight_production == TRUE`), or to output the actual raw company production values (`weight_production == FALSE`).
+We have also added the parameter `weight_production` to `target_market_share()`. This allows you to choose between outputting production values, weighted by relative loan size (`weight_production = TRUE`), or to output the actual raw company production values (`weight_production = FALSE`).
 
 ```{r}
 weighted <- TRUE
