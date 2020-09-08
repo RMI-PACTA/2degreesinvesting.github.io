@@ -1,5 +1,25 @@
 [
   {
+    "path": "posts/2020-09-08-r2dii-analysis-0-1-0-is-now-on-cran/",
+    "title": "r2dii.analysis 0.1.0 is now on CRAN",
+    "description": "This release includes a significant rework of the `target_sda()` function, and \nseveral bugfixes.",
+    "author": [
+      {
+        "name": "Jackson Hoffart",
+        "url": "https://github.com/jdhoffa"
+      }
+    ],
+    "date": "2020-09-08",
+    "categories": [
+      "r2dii",
+      "package",
+      "release"
+    ],
+    "preview": {},
+    "last_modified": "2020-09-08T13:34:21-05:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/2020-08-14-r2dii-data-0-1-2-and-r2dii-match-0-0-4-are-now-on-cran/",
     "title": "r2dii.data 0.1.2 and r2dii.match 0.0.4 are now on CRAN",
     "description": "Less bugs and more features",
@@ -16,7 +36,7 @@
       "release"
     ],
     "preview": "posts/2020-08-14-r2dii-data-0-1-2-and-r2dii-match-0-0-4-are-now-on-cran/preview.jpg",
-    "last_modified": "2020-08-14T14:21:14-05:00",
+    "last_modified": "2020-09-08T12:48:59-05:00",
     "input_file": {}
   },
   {
