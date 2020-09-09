@@ -13,6 +13,7 @@ output:
 categories:
   - r2dii
   - programming
+  - favorites
 preview: preview.jpg
 twitter:
   site: "@mauro_lepore"

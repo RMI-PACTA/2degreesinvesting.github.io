@@ -52,10 +52,11 @@
     "date": "2020-07-31",
     "categories": [
       "r2dii",
-      "programming"
+      "programming",
+      "favorites"
     ],
     "preview": "posts/2020-07-31-chunk-your-data/preview.jpg",
-    "last_modified": "2020-08-14T12:07:47-05:00",
+    "last_modified": "2020-09-09T11:39:38-05:00",
     "input_file": {}
   },
   {
@@ -224,10 +225,11 @@
     "date": "2020-06-26",
     "categories": [
       "r2dii",
-      "community"
+      "community",
+      "favorites"
     ],
     "preview": "posts/2020-06-26-instructions-to-raise-an-issue/preview.png",
-    "last_modified": "2020-08-14T12:07:46-05:00",
+    "last_modified": "2020-09-09T11:39:33-05:00",
     "input_file": {},
     "preview_width": 1438,
     "preview_height": 912
