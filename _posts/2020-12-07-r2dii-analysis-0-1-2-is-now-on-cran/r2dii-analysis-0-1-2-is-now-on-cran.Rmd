@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-r2dii.analysis 0.1.2 is now on CRAN. This release fixes a number of bugs that you can learn about [here](https://2degreesinvesting.github.io/r2dii.analysis/news/index.html); this post highlights some of the major bugs fixed by this release. 
+r2dii.analysis 0.1.2 is now on CRAN. This release fixes a number of bugs. All changes are listed [here](https://2degreesinvesting.github.io/r2dii.analysis/news/index.html); this post highlights the major bugs fixes.
 
 You can update or install r2dii.analysis from CRAN with:
 
@@ -41,18 +41,19 @@ install.packages("r2dii.data")
 install.packages("r2dii.match")
 ```
 
-To use r2dii.analysis, you can load it into your active R session with:
+To use r2dii.analysis, you can load it into your active R session with `library()`. This example uses some other packages that you may also load now so they are easy to see.
 
 ```{r}
+library(dplyr)
+library(ggplot2)
 library(r2dii.data)
 library(r2dii.match)
 library(r2dii.analysis)
 ```
 
-Let's also calculate some demo data-frames, that we can use to explain the bugfixes: 
-```{r}
-library(dplyr)
+Let's also calculate some demo data-frames, that we can use to explain the bugfixes:
 
+```{r}
 validated_matched <- match_name(loanbook_demo, ald_demo) %>% 
   prioritize()
 
@@ -81,9 +82,9 @@ There are a few major fixes in this release of r2dii.analysis, in particular to 
 
 #### target_market_share()
 
-`target_market_share` outputs a dataframe with the value `technology_share`. This value is expected to sum to `1`, when aggregated across appropriate groupings (e.g. by `sector`, `region`, `metric`). Previously, this would be true when results were output at company-level, but not at portfolio-level. The value is now reweighted prior to output, resulting in correct `technology_share` values that sum to `1`.
+`target_market_share` outputs a dataframe with the value `technology_share`. This value is expected to always sum to `1`, even when aggregated across appropriate groupings (e.g. by `sector`, `region`, `metric`). Previously, this would be true when results were output at company-level, but not at portfolio-level.
 
-Below, I quickly show that this is now the case for both the portfolio- and company-level results, to at least 10 significant digits (further digits may be off due to rounding errors):
+Below, I show that this is now the case for results at the level of both portfolios and companies (at least to 10 significant digits; further digits may be off due to rounding errors):
 
 ```{r}
 portfolio_sum <- portfolio_market_share_targets %>% 
@@ -105,11 +106,9 @@ all(round(company_sum$share_sum, 10) == 1)
 
 The function `target_sda` calculates a target pathway for `emission_factor` by computing a convergence target to the year 2050, as detailed in [this article](https://2degreesinvesting.github.io/r2dii.analysis/articles/target-sda.html). A bug in the function was causing this target to be calculated erroneously early, to the last year present in the input `ald` file. 
 
-This has now been fixed, and the convergence targets are correctly calculated to the final year present in the input `scenario`:
+The convergence targets are now correctly calculated to the final year present in the input `scenario`:
 
 ``` {r}
-library(ggplot2)
-
 matched <- tibble::tribble(
   ~id_loan, ~loan_size_outstanding, ~loan_size_outstanding_currency, ~loan_size_credit_limit, ~loan_size_credit_limit_currency, ~id_2dii,            ~level, ~score, ~sector,   ~name_ald, ~sector_ald,
   "L1",                      1,                           "EUR",                       2,                            "EUR",    "UP1", "ultimate_parent",      1, "steel", "company a",     "steel"
