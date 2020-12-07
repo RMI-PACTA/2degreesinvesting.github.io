@@ -51,7 +51,7 @@ library(r2dii.match)
 library(r2dii.analysis)
 ```
 
-Let's also calculate some demo data-frames, that we can use to explain the bugfixes:
+Let's also calculate some demo data frames, that we can use to explain the bugfixes:
 
 ```{r}
 validated_matched <- match_name(loanbook_demo, ald_demo) %>%
@@ -82,7 +82,7 @@ There are a few major fixes in this release of r2dii.analysis, in particular to 
 
 #### target_market_share()
 
-`target_market_share` outputs a dataframe with the value `technology_share`. This value is expected to always sum to `1`, even when aggregated across appropriate groupings (e.g. by `sector`, `region`, `metric`). Previously, this would be true when results were output at company-level, but not at portfolio-level.
+`target_market_share` outputs a data frame with the value `technology_share`. This value is expected to always sum to `1`, even when aggregated across appropriate groupings (e.g. by `sector`, `region`, `metric`). Previously, this would be true when results were output at company-level, but not at portfolio-level.
 
 Below, I show that this is now the case for results at the level of both portfolios and companies (at least to 10 significant digits; further digits may be off due to rounding errors):
 
