@@ -1,0 +1,174 @@
+---
+title: "r2dii.analysis 0.1.2 is now on CRAN"
+description: |
+  Squashing bugs before the holidays.
+author:
+  - name: Jackson Hoffart
+    url: https://github.com/jdhoffa
+base_url: https://2degreesinvesting.github.io/
+date: 2020-12-07
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
+    self_contained: true
+categories:
+  - r2dii
+  - package
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+r2dii.analysis 0.1.2 is now on CRAN. This release fixes a number of bugs that you can learn about [here](https://2degreesinvesting.github.io/r2dii.analysis/news/index.html); this post highlights some of the major bugs fixed by this release. 
+
+You can update or install r2dii.analysis from CRAN with:
+
+```r
+install.packages("r2dii.analysis")
+```
+
+Make sure to also update it's dependencies, in particular r2dii.data and r2dii.match:
+
+```r
+install.packages("r2dii.data")
+install.packages("r2dii.match")
+```
+
+To use r2dii.analysis, you can load it into your active R session with:
+
+```{r}
+library(r2dii.data)
+library(r2dii.match)
+library(r2dii.analysis)
+```
+
+Let's also calculate some demo data-frames, that we can use to explain the bugfixes: 
+```{r}
+library(dplyr)
+
+validated_matched <- match_name(loanbook_demo, ald_demo) %>% 
+  prioritize()
+
+# loan weighted portfolio-level results
+portfolio_market_share_targets <- target_market_share(
+  validated_matched,
+  ald_demo,
+  scenario_demo_2020,
+  region_isos_demo
+  )
+
+# unweighted company-level results
+company_market_share_targets <- target_market_share(
+  validated_matched,
+  ald_demo,
+  scenario_demo_2020,
+  region_isos_demo,
+  by_company = TRUE,
+  weight_production = FALSE
+  )
+```
+
+### r2dii.analysis 0.1.2
+
+There are a few major fixes in this release of r2dii.analysis, in particular to the functions `target_market_share` and `target_sda`. 
+
+#### target_market_share()
+
+`target_market_share` outputs a dataframe with the value `technology_share`. This value is expected to sum to `1`, when aggregated across appropriate groupings (e.g. by `sector`, `region`, `metric`). Previously, this would be true when results were output at company-level, but not at portfolio-level. The value is now reweighted prior to output, resulting in correct `technology_share` values that sum to `1`.
+
+Below, I quickly show that this is now the case for both the portfolio- and company-level results, to at least 10 significant digits (further digits may be off due to rounding errors):
+
+```{r}
+portfolio_sum <- portfolio_market_share_targets %>% 
+  group_by(sector, metric, region, year) %>% 
+  summarize(share_sum = sum(technology_share), .groups = "drop")
+
+# true for all, to 10 significant digits
+all(round(portfolio_sum$share_sum, 10) == 1) 
+
+company_sum <- company_market_share_targets %>% 
+  group_by(sector, metric, region, year, name_ald) %>% 
+  summarize(share_sum = sum(technology_share), .groups = "drop")
+
+# true for all, to 10 significant digits
+all(round(company_sum$share_sum, 10) == 1) 
+```
+
+#### target_sda()
+
+The function `target_sda` calculates a target pathway for `emission_factor` by computing a convergence target to the year 2050, as detailed in [this article](https://2degreesinvesting.github.io/r2dii.analysis/articles/target-sda.html). A bug in the function was causing this target to be calculated erroneously early, to the last year present in the input `ald` file. 
+
+This has now been fixed, and the convergence targets are correctly calculated to the final year present in the input `scenario`:
+
+``` {r}
+library(ggplot2)
+
+matched <- tibble::tribble(
+  ~id_loan, ~loan_size_outstanding, ~loan_size_outstanding_currency, ~loan_size_credit_limit, ~loan_size_credit_limit_currency, ~id_2dii,            ~level, ~score, ~sector,   ~name_ald, ~sector_ald,
+  "L1",                      1,                           "EUR",                       2,                            "EUR",    "UP1", "ultimate_parent",      1, "steel", "company a",     "steel"
+)
+
+# an ALD file with values only between 2020 and 2030
+ald <- tibble::tribble(
+  ~name_company, ~sector, ~technology, ~year, ~production, ~emission_factor, ~plant_location, ~is_ultimate_owner,
+  "company a", "steel",     "steel",  2020,           1,           1.5,            "DE",               TRUE,
+  "company a", "steel",     "steel",  2025,           1,           1.5,            "DE",               TRUE,
+  "company a", "steel",     "steel",  2030,           1,           1.5,            "DE",               TRUE,
+  "company b", "steel",     "steel",  2020,           1,           2.5,            "DE",               TRUE,
+  "company b", "steel",     "steel",  2025,           1,           2.5,            "DE",               TRUE,
+  "company b", "steel",     "steel",  2030,           1,           2.5,            "DE",               TRUE
+)
+
+# a scenario file with targets at 2050
+co2_scenario <- tibble::tribble(
+  ~scenario_source, ~scenario, ~sector,  ~region, ~year, ~emission_factor,              ~emission_factor_unit,
+  "etp_2017",    "b2ds", "steel", "global",  2020, 2, "tonnes of CO2 per tonne of steel",
+  "etp_2017",    "b2ds", "steel", "global",  2025, 1.9, "tonnes of CO2 per tonne of steel",
+  "etp_2017",    "b2ds", "steel", "global",  2030, 1.8, "tonnes of CO2 per tonne of steel",
+  "etp_2017",    "b2ds", "steel", "global",  2050,      0.25, "tonnes of CO2 per tonne of steel",
+)
+
+# SDA portfolio-level results
+sda_targets <- target_sda(
+  matched,
+  ald,
+  co2_scenario
+) 
+
+ggplot(
+  data = sda_targets, 
+  mapping = aes(
+    x = year, 
+    y = emission_factor_value, 
+    color = emission_factor_metric)
+) +
+  geom_line() +
+  facet_wrap(~ sector)
+```
+
+## Acknowledgements
+
+```{r Acknowledgements, echo=FALSE}
+# bash
+# git shortlog --summary tag-oldrel..tag-release
+# For example: Who contributed to r2dii.match 0.0.2 (since 0.0.1)?
+# git shortlog --summary 0.0.1..0.0.2
+
+thank <- function(x) {
+  x <- sort(x)
+  paste0("[", x, "]", sprintf("(https://github.com/%s)", x), collapse = ", ")
+}
+contributors <- c(
+  "jdhoffa",
+  "maurolepore"
+)
+```
+
+While this release includes commits from only a few of us (`r thank(contributors)`), it is thanks to feedback from our colleagues and users.
