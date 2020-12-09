@@ -41,7 +41,7 @@ install.packages("r2dii.data")
 install.packages("r2dii.match")
 ```
 
-To use r2dii.analysis, you can load it into your active R session with `library()`. This example uses some other packages that you may also load now so they are easy to see.
+To use r2dii.analysis, you can load it into your active R session with `library()`. This example uses some other packages that you may also load now.
 
 ```{r}
 library(dplyr)
@@ -51,7 +51,7 @@ library(r2dii.match)
 library(r2dii.analysis)
 ```
 
-Let's also calculate some demo data frames, that we can use to explain the bugfixes:
+Let's also calculate some demo data frames, that we can use to help explain the bugfixes:
 
 ```{r}
 validated_matched <- match_name(loanbook_demo, ald_demo) %>%
