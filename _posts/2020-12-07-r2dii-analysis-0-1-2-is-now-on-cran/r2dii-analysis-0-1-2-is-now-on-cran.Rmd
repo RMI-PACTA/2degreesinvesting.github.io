@@ -1,5 +1,5 @@
 ---
-title: "r2dii.analysis 0.1.2 is now on CRAN"
+title: "r2dii.data 0.1.6, r2dii.match 0.0.7 and r2dii.analysis 0.1.2 are now on CRAN"
 description: |
   Squashing bugs before the holidays.
 author:
@@ -26,22 +26,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-r2dii.analysis 0.1.2 is now on CRAN. This release fixes a number of bugs. All changes are listed [here](https://2degreesinvesting.github.io/r2dii.analysis/news/index.html); this post highlights the major bugs fixes.
+r2dii.data 0.1.6, r2dii.match 0.0.7 and r2dii.analysis 0.1.2 are now on CRAN. These releases fix a number of bugs. All changes are listed in the changelog at each packages website (e.g. [here](https://2degreesinvesting.github.io/r2dii.analysis/news/index.html) for r2dii.analysis); this post highlights the major bugs fixes and feature additions.
 
-You can update or install r2dii.analysis from CRAN with:
-
-```r
-install.packages("r2dii.analysis")
-```
-
-Make sure to also update it's dependencies, in particular r2dii.data and r2dii.match:
+You can update or install these packages from CRAN using:
 
 ```r
 install.packages("r2dii.data")
 install.packages("r2dii.match")
+install.packages("r2dii.analysis")
 ```
 
-To use r2dii.analysis, you can load it into your active R session with `library()`. This example uses some other packages that you may also load now.
+To use r2dii packages, you can load them into your active R session with `library()`. This example uses some other packages that you may also load now.
 
 ```{r}
 library(dplyr)
@@ -51,10 +46,56 @@ library(r2dii.match)
 library(r2dii.analysis)
 ```
 
-Let's also calculate some demo data frames, that we can use to help explain the bugfixes:
+### r2dii.data 0.1.6
+
+Most changes to r2dii.data are with updates to the internal `region` and `classification` files. In particular, the `cnb_classification` dataset was added, to facilitate the sector classification of Nigerian banks: 
 
 ```{r}
-validated_matched <- match_name(loanbook_demo, ald_demo) %>%
+head(cnb_classification)
+```
+
+The country code for Kosovo was also updated to the correct value of `xk`:
+
+```{r}
+filter(iso_codes, country == "kosovo")
+```
+
+### r2dii.match 0.0.7
+
+The only user-facing change to r2dii.match was the addition of the `...` argument which allows further arguments to be passed directly the the `stringdist::stringsim()` function. This feature allows advanced users to have more flexibility over the particular matching algorithm implemented in the `match_name()` function. 
+
+For most users, the default values are likely still sufficient: 
+
+```{r}
+matched <- match_name(loanbook_demo, ald_demo)
+
+matched %>% 
+  filter(score != 1) %>% 
+  select(name, name_ald, score)
+```
+
+however, the `q` parameter of the `qgram` method, for example, can now be tweaked directly:
+
+``` {r}
+matched_qgram <- match_name(
+  loanbook_demo,
+  ald_demo, 
+  method = "qgram",
+  q = 1.5
+)
+
+matched_qgram %>% 
+  filter(score != 1) %>% 
+  select(name, name_ald, score)
+```
+
+
+### r2dii.analysis 0.1.2
+
+Let's calculate some more demo data frames, that we can use to help explain the rest of the bugfixes:
+
+``` {r}
+validated_matched <- matched %>% 
   prioritize()
 
 # loan weighted portfolio-level results
@@ -75,9 +116,6 @@ company_market_share_targets <- target_market_share(
   weight_production = FALSE
 )
 ```
-
-### r2dii.analysis 0.1.2
-
 There are a few major fixes in this release of r2dii.analysis, in particular to the functions `target_market_share` and `target_sda`. 
 
 #### target_market_share()
