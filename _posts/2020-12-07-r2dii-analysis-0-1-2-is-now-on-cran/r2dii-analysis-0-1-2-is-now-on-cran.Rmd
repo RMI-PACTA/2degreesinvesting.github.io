@@ -51,7 +51,8 @@ library(r2dii.analysis)
 Most changes to r2dii.data are with updates to the internal `region` and `classification` files. In particular, the `cnb_classification` dataset was added, to facilitate the sector classification of Nigerian banks: 
 
 ```{r}
-head(cnb_classification)
+cnb_classification %>% 
+  filter(sector == "aviation") # show some illustrative results for aviation
 ```
 
 The country code for Kosovo was also updated to the correct value of `xk`:
@@ -62,9 +63,7 @@ filter(iso_codes, country == "kosovo")
 
 ### r2dii.match 0.0.7
 
-The only user-facing change to r2dii.match was the addition of the `...` argument which allows further arguments to be passed directly the the `stringdist::stringsim()` function. This feature allows advanced users to have more flexibility over the particular matching algorithm implemented in the `match_name()` function. 
-
-For most users, the default values are likely still sufficient: 
+The only user-facing change to r2dii.match was the addition of the `...` argument which allows further arguments to be passed directly the the `stringdist::stringsim()` function. For most users, the default values are likely still sufficient: 
 
 ```{r}
 matched <- match_name(loanbook_demo, ald_demo)
@@ -74,7 +73,7 @@ matched %>%
   select(name, name_ald, score)
 ```
 
-however, the `q` parameter of the `qgram` method, for example, can now be tweaked directly:
+however, advanced users can now specify many different parameters of the different methods available to`stringdist::stringsim`. For example, the `q` parameter of the `qgram` method can now be tweaked directly:
 
 ``` {r}
 matched_qgram <- match_name(
@@ -89,6 +88,7 @@ matched_qgram %>%
   select(name, name_ald, score)
 ```
 
+Pull up the documentation of either `stringdist::stringsim` for more details. 
 
 ### r2dii.analysis 0.1.2
 
@@ -120,7 +120,7 @@ There are a few major fixes in this release of r2dii.analysis, in particular to 
 
 #### target_market_share()
 
-`target_market_share` outputs a data frame with the value `technology_share`. This value is expected to always sum to `1`, even when aggregated across appropriate groupings (e.g. by `sector`, `region`, `metric`). Before, this was true only for results at the level of companies but not portfolios. Now, this is fixed and `technology_share` sums `1` at both levels (at least to 10 significant digits; further digits may be off due to rounding errors):
+`target_market_share` outputs a data frame with the value `technology_share`. This value is expected to always sum to `1` when aggregated across appropriate groupings (e.g. by `sector`, `region`, `metric`). Before, this was true only for results at company level, but not portfolio level. Now, this is fixed and `technology_share` sums to `1` at both levels (at least to 10 significant digits; further digits may be off due to rounding errors):
 
 ```{r}
 portfolio_sum <- portfolio_market_share_targets %>%
