@@ -7,7 +7,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-r2dii.data 0.1.6, r2dii.match 0.0.7 and r2dii.analysis 0.1.2 are now on CRAN. These releases fix a number of bugs. All changes are listed in the changelog at each packages website (e.g. [here](https://2degreesinvesting.github.io/r2dii.analysis/news/index.html) for r2dii.analysis); this post highlights the major bugs fixes and feature additions.
+r2dii.data 0.1.6, r2dii.match 0.0.7 and r2dii.analysis 0.1.2 are now on CRAN. These releases fix a number of bugs. All changes are listed in the changelog at the website of each package ([r2dii.data](https://2degreesinvesting.github.io/r2dii.data/news/index.html), [r2dii.match](https://2degreesinvesting.github.io/r2dii.match/news/index.html), [r2dii.analysis](https://2degreesinvesting.github.io/r2dii.analysis/news/index.html)); this post highlights the major bugs fixes and feature additions.
 
 You can update or install these packages from CRAN using:
 
@@ -20,7 +20,7 @@ install.packages("r2dii.analysis")
 To use r2dii packages, you can load them into your active R session with `library()`. This example uses some other packages that you may also load now.
 
 ```{r}
-library(dplyr)
+library(dplyr, warn.conflicts = FALSE)
 library(ggplot2)
 library(r2dii.data)
 library(r2dii.match)
@@ -44,7 +44,7 @@ filter(iso_codes, country == "kosovo")
 
 ### r2dii.match 0.0.7
 
-The only user-facing change to r2dii.match was the addition of the `...` argument which allows further arguments to be passed directly the the `stringdist::stringsim()` function. For most users, the default values are likely still sufficient: 
+The only user-facing change to r2dii.match was that `match_name()` gained the argument `...` to pass arguments to `stringdist::stringsim()`. Most users won't need this feature: 
 
 ```{r}
 matched <- match_name(loanbook_demo, ald_demo)
@@ -54,7 +54,7 @@ matched %>%
   select(name, name_ald, score)
 ```
 
-however, advanced users can now specify many different parameters of the different methods available to`stringdist::stringsim`. For example, the `q` parameter of the `qgram` method can now be tweaked directly:
+However, advanced users can now specify many different parameters of the different methods available to `stringdist::stringsim`. For example, the `q` parameter of the `qgram` method can now be tweaked directly:
 
 ``` {r}
 matched_qgram <- match_name(
@@ -69,11 +69,13 @@ matched_qgram %>%
   select(name, name_ald, score)
 ```
 
-Pull up the documentation of either `stringdist::stringsim` for more details. 
+For more details see `?stringdist::stringsim`.
 
 ### r2dii.analysis 0.1.2
 
-Let's calculate some more demo data frames, that we can use to help explain the rest of the bugfixes:
+There are a few major fixes in this release of r2dii.analysis, in particular to the functions `target_market_share` and `target_sda`. 
+
+To explain those bugfixes, let's calculate some more demo data frames:
 
 ``` {r}
 validated_matched <- matched %>% 
@@ -97,7 +99,6 @@ company_market_share_targets <- target_market_share(
   weight_production = FALSE
 )
 ```
-There are a few major fixes in this release of r2dii.analysis, in particular to the functions `target_market_share` and `target_sda`. 
 
 #### target_market_share()
 
