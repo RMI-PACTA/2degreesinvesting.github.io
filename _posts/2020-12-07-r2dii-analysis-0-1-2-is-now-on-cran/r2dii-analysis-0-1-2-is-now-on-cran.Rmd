@@ -7,7 +7,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-r2dii.data 0.1.6, r2dii.match 0.0.7 and r2dii.analysis 0.1.2 are now on CRAN. These releases fix a number of bugs. All changes are listed in the changelog at the website of each package ([r2dii.data](https://2degreesinvesting.github.io/r2dii.data/news/index.html), [r2dii.match](https://2degreesinvesting.github.io/r2dii.match/news/index.html), [r2dii.analysis](https://2degreesinvesting.github.io/r2dii.analysis/news/index.html)); this post highlights the major bugs fixes and feature additions.
+r2dii.data 0.1.6, r2dii.match 0.0.7 and r2dii.analysis 0.1.3 are now on CRAN. These releases fix a number of bugs. All changes are listed in the changelog at the website of each package ([r2dii.data](https://2degreesinvesting.github.io/r2dii.data/news/index.html), [r2dii.match](https://2degreesinvesting.github.io/r2dii.match/news/index.html), [r2dii.analysis](https://2degreesinvesting.github.io/r2dii.analysis/news/index.html)); this post highlights the major bugs fixes and feature additions.
 
 You can update or install these packages from CRAN using:
 
@@ -71,7 +71,7 @@ matched_qgram %>%
 
 For more details see `?stringdist::stringsim`.
 
-### r2dii.analysis 0.1.2
+### r2dii.analysis 0.1.3
 
 There are a few major fixes in this release of r2dii.analysis, in particular to the functions `target_market_share` and `target_sda`. 
 
