@@ -1,5 +1,5 @@
 ---
-title: "r2dii.data 0.1.6, r2dii.match 0.0.7 and r2dii.analysis 0.1.2 are now on CRAN"
+title: "r2dii.data 0.1.6, r2dii.match 0.0.7 and r2dii.analysis 0.1.3 are now on CRAN"
 description: |
   Squashing bugs before the holidays.
 author:
