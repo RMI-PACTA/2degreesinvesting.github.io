@@ -1,0 +1,211 @@
+---
+title: "r2dii.data 0.1.6, r2dii.match 0.0.7 and r2dii.analysis 0.1.3 are now on CRAN"
+description: |
+  Squashing bugs before the holidays.
+author:
+  - name: Jackson Hoffart
+    url: https://github.com/jdhoffa
+base_url: https://2degreesinvesting.github.io/
+date: 2020-12-07
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
+    self_contained: true
+categories:
+  - r2dii
+  - package
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+r2dii.data 0.1.6, r2dii.match 0.0.7 and r2dii.analysis 0.1.3 are now on CRAN. These releases fix a number of bugs. All changes are listed in the changelog at the website of each package ([r2dii.data](https://2degreesinvesting.github.io/r2dii.data/news/index.html), [r2dii.match](https://2degreesinvesting.github.io/r2dii.match/news/index.html), [r2dii.analysis](https://2degreesinvesting.github.io/r2dii.analysis/news/index.html)); this post highlights the major bugs fixes and feature additions.
+
+You can update or install these packages from CRAN using:
+
+```r
+install.packages("r2dii.data")
+install.packages("r2dii.match")
+install.packages("r2dii.analysis")
+```
+
+To use r2dii packages, you can load them into your active R session with `library()`. This example uses some other packages that you may also load now.
+
+```{r}
+library(dplyr, warn.conflicts = FALSE)
+library(ggplot2)
+library(r2dii.data)
+library(r2dii.match)
+library(r2dii.analysis)
+```
+
+### r2dii.data 0.1.6
+
+Most changes to r2dii.data are with updates to the internal `region` and `classification` files. In particular, the `cnb_classification` dataset was added, to facilitate the sector classification of Nigerian banks: 
+
+```{r}
+cnb_classification %>% 
+  filter(sector == "aviation") # show some illustrative results for aviation
+```
+
+The country code for Kosovo was also updated to the correct value of `xk`:
+
+```{r}
+filter(iso_codes, country == "kosovo")
+```
+
+### r2dii.match 0.0.7
+
+The only user-facing change to r2dii.match was that `match_name()` gained the argument `...` to pass arguments to `stringdist::stringsim()`. Most users won't need this feature: 
+
+```{r}
+matched <- match_name(loanbook_demo, ald_demo)
+
+matched %>% 
+  filter(score != 1) %>% 
+  select(name, name_ald, score)
+```
+
+However, advanced users can now specify many different parameters of the different methods available to `stringdist::stringsim`. For example, the `q` parameter of the `qgram` method can now be tweaked directly:
+
+``` {r}
+matched_qgram <- match_name(
+  loanbook_demo,
+  ald_demo, 
+  method = "qgram",
+  q = 1.5
+)
+
+matched_qgram %>% 
+  filter(score != 1) %>% 
+  select(name, name_ald, score)
+```
+
+For more details see `?stringdist::stringsim`.
+
+### r2dii.analysis 0.1.3
+
+There are a few major fixes in this release of r2dii.analysis, in particular to the functions `target_market_share` and `target_sda`. 
+
+To explain those bugfixes, let's calculate some more demo data frames:
+
+``` {r}
+validated_matched <- matched %>% 
+  prioritize()
+
+# loan weighted portfolio-level results
+portfolio_market_share_targets <- target_market_share(
+  validated_matched,
+  ald_demo,
+  scenario_demo_2020,
+  region_isos_demo
+)
+
+# unweighted company-level results
+company_market_share_targets <- target_market_share(
+  validated_matched,
+  ald_demo,
+  scenario_demo_2020,
+  region_isos_demo,
+  by_company = TRUE,
+  weight_production = FALSE
+)
+```
+
+#### target_market_share()
+
+`target_market_share` outputs a data frame with the value `technology_share`. This value is expected to always sum to `1` when aggregated across appropriate groupings (e.g. by `sector`, `region`, `metric`). Before, this was true only for results at company level, but not portfolio level. Now, this is fixed and `technology_share` sums to `1` at both levels (at least to 10 significant digits; further digits may be off due to rounding errors):
+
+```{r}
+portfolio_sum <- portfolio_market_share_targets %>%
+  group_by(sector, metric, region, year) %>%
+  summarize(share_sum = sum(technology_share), .groups = "drop")
+
+# true for all, to 10 significant digits
+all(round(portfolio_sum$share_sum, 10) == 1)
+
+company_sum <- company_market_share_targets %>%
+  group_by(sector, metric, region, year, name_ald) %>%
+  summarize(share_sum = sum(technology_share), .groups = "drop")
+
+# true for all, to 10 significant digits
+all(round(company_sum$share_sum, 10) == 1)
+```
+
+#### target_sda()
+
+The function `target_sda` calculates a target pathway for `emission_factor` by computing a convergence target to the year 2050, as detailed in [this article](https://2degreesinvesting.github.io/r2dii.analysis/articles/target-sda.html). A bug in the function was causing this target to be calculated erroneously early, to the last year present in the input `ald` file. 
+
+The convergence targets are now correctly calculated to the final year present in the input `scenario`:
+
+``` {r}
+matched <- tibble::tribble(
+  ~id_loan, ~loan_size_outstanding, ~loan_size_outstanding_currency, ~loan_size_credit_limit, ~loan_size_credit_limit_currency, ~id_2dii, ~level, ~score, ~sector, ~name_ald, ~sector_ald,
+  "L1", 1, "EUR", 2, "EUR", "UP1", "ultimate_parent", 1, "steel", "company a", "steel"
+)
+
+# an ALD file with values only between 2020 and 2030
+ald <- tibble::tribble(
+  ~name_company, ~sector, ~technology, ~year, ~production, ~emission_factor, ~plant_location, ~is_ultimate_owner,
+  "company a", "steel", "steel", 2020, 1, 1.5, "DE", TRUE,
+  "company a", "steel", "steel", 2025, 1, 1.5, "DE", TRUE,
+  "company a", "steel", "steel", 2030, 1, 1.5, "DE", TRUE,
+  "company b", "steel", "steel", 2020, 1, 2.5, "DE", TRUE,
+  "company b", "steel", "steel", 2025, 1, 2.5, "DE", TRUE,
+  "company b", "steel", "steel", 2030, 1, 2.5, "DE", TRUE
+)
+
+# a scenario file with targets at 2050
+co2_scenario <- tibble::tribble(
+  ~scenario_source, ~scenario, ~sector, ~region, ~year, ~emission_factor, ~emission_factor_unit,
+  "etp_2017", "b2ds", "steel", "global", 2020, 2, "tonnes of CO2 per tonne of steel",
+  "etp_2017", "b2ds", "steel", "global", 2025, 1.9, "tonnes of CO2 per tonne of steel",
+  "etp_2017", "b2ds", "steel", "global", 2030, 1.8, "tonnes of CO2 per tonne of steel",
+  "etp_2017", "b2ds", "steel", "global", 2050, 0.25, "tonnes of CO2 per tonne of steel",
+)
+
+# SDA portfolio-level results
+sda_targets <- target_sda(
+  matched,
+  ald,
+  co2_scenario
+)
+
+ggplot(
+  data = sda_targets,
+  mapping = aes(
+    x = year,
+    y = emission_factor_value,
+    color = emission_factor_metric
+  )
+) +
+  geom_line() +
+  facet_wrap(~sector)
+```
+
+## Acknowledgements
+
+```{r Acknowledgements, echo=FALSE}
+# bash
+# git shortlog --summary tag-oldrel..tag-release
+# For example: Who contributed to r2dii.match 0.0.2 (since 0.0.1)?
+# git shortlog --summary 0.0.1..0.0.2
+
+thank <- function(x) {
+  x <- sort(x)
+  paste0("[", x, "]", sprintf("(https://github.com/%s)", x), collapse = ", ")
+}
+contributors <- c(
+  "jdhoffa",
+  "maurolepore"
+)
+```
+
+While this release includes commits from only a few of us (`r thank(contributors)`), it is thanks to feedback from our colleagues and users.
