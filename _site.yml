@@ -28,4 +28,3 @@ twitter:
 output: 
   distill::distill_article:
     css: styles.css
-    theme: flatly
