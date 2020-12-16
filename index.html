@@ -1398,209 +1398,6 @@
 <!--/radix_placeholder_site_before_body-->
 <!--radix_placeholder_article_listing-->
 
-<style type="text/css">
-
-/* Styles for listing layout (hide title) */
-.layout-listing d-title, .layout-listing .d-title {
-  display: none;
-}
-
-/* Styles for posts lists (not auto-injected) */
-
-
-.posts-with-sidebar {
-  padding-left: 45px;
-  padding-right: 45px;
-}
-
-.posts-list .description h2,
-.posts-list .description p {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
-}
-
-.posts-list .description h2 {
-  font-weight: 700;
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.posts-list h2.post-tag {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  padding-bottom: 12px;
-}
-.posts-list {
-  margin-top: 60px;
-  margin-bottom: 24px;
-}
-
-.posts-list .post-preview {
-  text-decoration: none;
-  overflow: hidden;
-  display: block;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 24px 0;
-}
-
-.post-preview-last {
-  border-bottom: none !important;
-}
-
-.posts-list .posts-list-caption {
-  grid-column: screen;
-  font-weight: 400;
-}
-
-.posts-list .post-preview h2 {
-  margin: 0 0 6px 0;
-  line-height: 1.2em;
-  font-style: normal;
-  font-size: 24px;
-}
-
-.posts-list .post-preview p {
-  margin: 0 0 12px 0;
-  line-height: 1.4em;
-  font-size: 16px;
-}
-
-.posts-list .post-preview .thumbnail {
-  box-sizing: border-box;
-  margin-bottom: 24px;
-  position: relative;
-  max-width: 500px;
-}
-.posts-list .post-preview img {
-  width: 100%;
-  display: block;
-}
-
-.posts-list .metadata {
-  font-size: 12px;
-  line-height: 1.4em;
-  margin-bottom: 18px;
-}
-
-.posts-list .metadata > * {
-  display: inline-block;
-}
-
-.posts-list .metadata .publishedDate {
-  margin-right: 1em;
-}
-
-.posts-list .metadata .tags {
-  margin-top: 1em;
-}
-
-.posts-list .tags .tag {
-  color: rgba(0,0,0,0.67);
-  padding: 0.3em 0.5em;
-  margin: 0;
-  font-size: 80%;
-  border: 1px solid rgba(0,0,0,0.4);
-  border-radius: 3px;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-.posts-list img {
-  opacity: 1;
-}
-
-.posts-list img[data-src] {
-  opacity: 0;
-}
-
-.posts-more {
-  clear: both;
-}
-
-
-.posts-sidebar {
-  font-size: 16px;
-}
-
-.posts-sidebar h3 {
-  font-size: 16px;
-  margin-top: 0;
-  margin-bottom: 0.5em;
-  font-weight: 400;
-  text-transform: uppercase;
-}
-
-.sidebar-section {
-  margin-bottom: 30px;
-}
-
-.categories ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.categories li {
-  color: rgba(0, 0, 0, 0.8);
-  margin-bottom: 0;
-}
-
-.categories li>a {
-  border-bottom: none;
-}
-
-.categories li>a:hover {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
-}
-
-.categories .active {
-  font-weight: 600;
-}
-
-.categories .category-count {
-  color: rgba(0, 0, 0, 0.4);
-}
-
-
-@media(min-width: 768px) {
-  .posts-list .post-preview h2 {
-    font-size: 26px;
-  }
-  .posts-list .post-preview .thumbnail {
-    float: right;
-    width: 35%;
-    margin-bottom: 0;
-  }
-  .posts-list .post-preview .description {
-    float: left;
-    width: 45%;
-  }
-  .posts-list .post-preview .metadata {
-    float: left;
-    width: 15%;
-    margin-top: 8px;
-  }
-  .posts-list .post-preview p {
-    margin: 0 0 12px 0;
-    line-height: 1.5em;
-    font-size: 16px;
-  }
-  .posts-with-sidebar .posts-list {
-    float: left;
-    width: 72%;
-  }
-  .posts-with-sidebar .posts-sidebar {
-    float: right;
-    width: 20%;
-    margin-top: 60px;
-    padding-top: 24px;
-    padding-bottom: 24px;
-  }
-}
-
-.downlevel .posts-list .post-preview {
-  color: inherit;
-}
-
-</style>
 
 <script type="application/javascript">
 
@@ -1652,16 +1449,16 @@ function init_posts_list() {
     set_posts_visible($('.posts-list').children('a'), false);
 
     // if we have a hash filter
-    if (window.location.hash) {
+    if (window.location.hash && window.location.hash.startsWith("#category:")) {
 
       // mark posts that match the category visible
-      var page_category = window.location.hash.replace("#", "");
+      var page_category = window.location.hash.replace(/^#category:/, "");
       var posts = $('.post-metadata').map(function(idx, script) {
         var metadata = $.parseJSON($(script).html());
         var post = null;
         $.each(metadata.categories, function(idx, category) {
           category = category.replace(/ /g,"_");
-          if (category == page_category) {
+          if ((page_category || '').toLowerCase() === "articles" || category === page_category) {
             post = $(script).parent().get();
             return false;
           }
@@ -1673,10 +1470,22 @@ function init_posts_list() {
       // mark the hash active
       $('.categories li>a[href="' + window.location.hash + '"]').addClass('active');
 
+      // update the list_caption
+      var list_caption = $('.posts-list-caption');
+      var caption = (page_category || '').toLowerCase() === "articles"
+        ? list_caption.attr('data-caption')
+        : ('Category: ' + page_category.replace(/_/g," "));
+      list_caption.text(caption);
+
     } else {
 
       // no hash filter, make all posts visible (subject to max display)
       set_posts_visible($('.posts-list').children(), true);
+
+      // reset list caption
+      var list_caption = $('.posts-list-caption');
+      list_caption.text(list_caption.attr('data-caption'));
+
 
     }
   }
@@ -1691,6 +1500,12 @@ function init_posts_list() {
       $('.posts-more a').addClass('hidden');
     }
   }
+
+  // click handling for tags
+  $('.dt-tag').click(function(ev) {
+    window.location.hash = '#category:' + $(this).text().replace(/ /g, "_");
+    return false;
+  })
 
   // hash filter handling
   apply_hash_filter();
@@ -1715,17 +1530,45 @@ function init_posts_list() {
 
 <div class="posts-container posts-with-sidebar posts-apply-limit l-screen-inset">
 <div class="posts-list">
-<h1 class="posts-list-caption">2DII Blog</h1>
+<h1 class="posts-list-caption" data-caption="2DII Blog">2DII Blog</h1>
+<a href="posts/2020-12-07-r2dii-analysis-0-1-3-is-now-on-cran/" class="post-preview">
+<script class="post-metadata" type="text/json">{"categories":["r2dii","package"]}</script>
+<div class="metadata">
+<div class="publishedDate">Dec. 7, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Jackson Hoffart</div>
+</div>
+</div>
+<div class="thumbnail">
+<img src="posts/2020-12-07-r2dii-analysis-0-1-3-is-now-on-cran/distill-preview.png"/>
+</div>
+<div class="description">
+<h2>r2dii.data 0.1.6, r2dii.match 0.0.7 and r2dii.analysis 0.1.3 are now on CRAN</h2>
+<div class="dt-tags">
+<div class="dt-tag">r2dii</div>
+<div class="dt-tag">package</div>
+</div>
+<p>Squashing bugs before the holidays.</p>
+</div>
+</a>
 <a href="posts/2020-09-08-r2dii-analysis-0-1-0-is-now-on-cran/" class="post-preview">
 <script class="post-metadata" type="text/json">{"categories":["r2dii","package","release"]}</script>
 <div class="metadata">
 <div class="publishedDate">Sept. 8, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Jackson Hoffart</div>
+</div>
 </div>
 <div class="thumbnail">
-<img data-src="posts/2020-09-08-r2dii-analysis-0-1-0-is-now-on-cran/preview.jpg"/>
+<img src="posts/2020-09-08-r2dii-analysis-0-1-0-is-now-on-cran/preview.jpg"/>
 </div>
 <div class="description">
 <h2>r2dii.analysis 0.1.0 is now on CRAN</h2>
+<div class="dt-tags">
+<div class="dt-tag">r2dii</div>
+<div class="dt-tag">package</div>
+<div class="dt-tag">release</div>
+</div>
 <p>This release includes a significant rework of the `target_sda()` function, and 
 several bugfixes.</p>
 </div>
@@ -1734,12 +1577,20 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["r2dii","software development","release"]}</script>
 <div class="metadata">
 <div class="publishedDate">Aug. 14, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Mauro Lepore</div>
+</div>
 </div>
 <div class="thumbnail">
-<img data-src="posts/2020-08-14-r2dii-data-0-1-2-and-r2dii-match-0-0-4-are-now-on-cran/preview.jpg"/>
+<img src="posts/2020-08-14-r2dii-data-0-1-2-and-r2dii-match-0-0-4-are-now-on-cran/preview.jpg"/>
 </div>
 <div class="description">
 <h2>r2dii.data 0.1.2 and r2dii.match 0.0.4 are now on CRAN</h2>
+<div class="dt-tags">
+<div class="dt-tag">r2dii</div>
+<div class="dt-tag">software development</div>
+<div class="dt-tag">release</div>
+</div>
 <p>Less bugs and more features</p>
 </div>
 </a>
@@ -1747,12 +1598,20 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["r2dii","programming","favorites"]}</script>
 <div class="metadata">
 <div class="publishedDate">July 31, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Mauro Lepore</div>
+</div>
 </div>
 <div class="thumbnail">
-<img data-src="posts/2020-07-31-chunk-your-data/preview.jpg"/>
+<img src="posts/2020-07-31-chunk-your-data/preview.jpg"/>
 </div>
 <div class="description">
 <h2>Using `match_name()` with large loanbooks</h2>
+<div class="dt-tags">
+<div class="dt-tag">r2dii</div>
+<div class="dt-tag">programming</div>
+<div class="dt-tag">favorites</div>
+</div>
 <p>How to resolve memory issues</p>
 </div>
 </a>
@@ -1760,12 +1619,19 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["meta","ds-incubator"]}</script>
 <div class="metadata">
 <div class="publishedDate">July 28, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Mauro Lepore</div>
+</div>
 </div>
 <div class="thumbnail">
-<img data-src="posts/2020-07-28-what-and-how-to-submit-your-post/preview.jpg"/>
+<img src="posts/2020-07-28-what-and-how-to-submit-your-post/preview.jpg"/>
 </div>
 <div class="description">
 <h2>Publish your post here</h2>
+<div class="dt-tags">
+<div class="dt-tag">meta</div>
+<div class="dt-tag">ds-incubator</div>
+</div>
 <p>Details on what and how to submit a new blog post</p>
 </div>
 </a>
@@ -1773,12 +1639,19 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["programming","PACTA_analysis"]}</script>
 <div class="metadata">
 <div class="publishedDate">July 27, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Jacob Kastl</div>
+</div>
 </div>
 <div class="thumbnail">
 <img data-src="posts/2020-07-27-config-project-settings/preview.jpg"/>
 </div>
 <div class="description">
 <h2>PACTA_analysis - New config file: project_settings</h2>
+<div class="dt-tags">
+<div class="dt-tag">programming</div>
+<div class="dt-tag">PACTA_analysis</div>
+</div>
 <p>This post outlines the changes of the workflow in the PACTA_analysis repository. Everyone who works with this repository is encouraged to read this.</p>
 </div>
 </a>
@@ -1786,12 +1659,19 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["other","community"]}</script>
 <div class="metadata">
 <div class="publishedDate">July 25, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Mauro Lepore</div>
+</div>
 </div>
 <div class="thumbnail">
 <img data-src="posts/2020-07-25-gh-flow/preview.jpg"/>
 </div>
 <div class="description">
 <h2>GitHub flow</h2>
+<div class="dt-tags">
+<div class="dt-tag">other</div>
+<div class="dt-tag">community</div>
+</div>
 <p>Submit pull requests from any branch -- except master</p>
 </div>
 </a>
@@ -1799,12 +1679,19 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["other","scenarios"]}</script>
 <div class="metadata">
 <div class="publishedDate">July 24, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Vincent Jerosch-Herold</div>
+</div>
 </div>
 <div class="thumbnail">
 <img data-src="posts/2020-07-24-when-scenarios-and-reality-diverge/preview.png"/>
 </div>
 <div class="description">
 <h2>When Scenarios and Reality Diverge</h2>
+<div class="dt-tags">
+<div class="dt-tag">other</div>
+<div class="dt-tag">scenarios</div>
+</div>
 <p>A deep dive into IEA scenarios.</p>
 </div>
 </a>
@@ -1812,12 +1699,19 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["r2dii","package"]}</script>
 <div class="metadata">
 <div class="publishedDate">July 18, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Mauro Lepore</div>
+</div>
 </div>
 <div class="thumbnail">
 <img data-src="posts/2020-07-18-improving-r2dii-match/preview.jpg"/>
 </div>
 <div class="description">
 <h2>Improving r2dii.match</h2>
+<div class="dt-tags">
+<div class="dt-tag">r2dii</div>
+<div class="dt-tag">package</div>
+</div>
 <p>How to work with big data, and benchmarks of a more efficient version of `match_name()`</p>
 </div>
 </a>
@@ -1825,12 +1719,18 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["other"]}</script>
 <div class="metadata">
 <div class="publishedDate">July 8, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Mauro Lepore</div>
+</div>
 </div>
 <div class="thumbnail">
 <img data-src="posts/2020-07-08-installing-packages-without-internet/preview.jpg"/>
 </div>
 <div class="description">
 <h2>Installing R packages when you are offline</h2>
+<div class="dt-tags">
+<div class="dt-tag">other</div>
+</div>
 <p>Some options and hacks</p>
 </div>
 </a>
@@ -1838,12 +1738,19 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["r2dii","package"]}</script>
 <div class="metadata">
 <div class="publishedDate">June 30, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Jackson Hoffart</div>
+</div>
 </div>
 <div class="thumbnail">
 <img data-src="posts/2020-06-30-r2dii-suite-is-now-on-cran/preview.jpg"/>
 </div>
 <div class="description">
 <h2>r2dii suite is now on CRAN</h2>
+<div class="dt-tags">
+<div class="dt-tag">r2dii</div>
+<div class="dt-tag">package</div>
+</div>
 <p>R packages to implement the core functionality of the Paris Agreement Capital Transition Assessment (PACTA)</p>
 </div>
 </a>
@@ -1851,12 +1758,19 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["r2dii","package"]}</script>
 <div class="metadata">
 <div class="publishedDate">June 29, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Mauro Lepore</div>
+</div>
 </div>
 <div class="thumbnail">
 <img data-src="posts/2020-06-29-r2dii-analysis-0-0-1/preview.jpg"/>
 </div>
 <div class="description">
 <h2>r2dii.analysis 0.0.1 is now on CRAN</h2>
+<div class="dt-tags">
+<div class="dt-tag">r2dii</div>
+<div class="dt-tag">package</div>
+</div>
 <p>Tools to calculate climate targets for financial portfolios</p>
 </div>
 </a>
@@ -1864,12 +1778,20 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["r2dii","community","favorites"]}</script>
 <div class="metadata">
 <div class="publishedDate">June 26, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Mauro Lepore</div>
+</div>
 </div>
 <div class="thumbnail">
 <img data-src="posts/2020-06-26-instructions-to-raise-an-issue/preview.png"/>
 </div>
 <div class="description">
 <h2>How to raise an issue</h2>
+<div class="dt-tags">
+<div class="dt-tag">r2dii</div>
+<div class="dt-tag">community</div>
+<div class="dt-tag">favorites</div>
+</div>
 <p>Help us help you</p>
 </div>
 </a>
@@ -1877,12 +1799,19 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["other","community"]}</script>
 <div class="metadata">
 <div class="publishedDate">June 23, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Mauro Lepore</div>
+</div>
 </div>
 <div class="thumbnail">
 <img data-src="posts/2020-06-23-github-and-rstudio/preview.jpg"/>
 </div>
 <div class="description">
 <h2>Onboarding to GitHub and RStudio</h2>
+<div class="dt-tags">
+<div class="dt-tag">other</div>
+<div class="dt-tag">community</div>
+</div>
 <p>Tools and practices to hit the ground running</p>
 </div>
 </a>
@@ -1890,12 +1819,19 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["package","r2dii"]}</script>
 <div class="metadata">
 <div class="publishedDate">June 15, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Mauro Lepore</div>
+</div>
 </div>
 <div class="thumbnail">
 <img data-src="posts/2020-06-11-r2dii-analysis-release-candidate/preview.jpg"/>
 </div>
 <div class="description">
 <h2>r2dii.analysis: Release candidate</h2>
+<div class="dt-tags">
+<div class="dt-tag">package</div>
+<div class="dt-tag">r2dii</div>
+</div>
 <p>Help us get to the first release</p>
 </div>
 </a>
@@ -1903,12 +1839,18 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["other"]}</script>
 <div class="metadata">
 <div class="publishedDate">June 10, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Mauro Lepore</div>
+</div>
 </div>
 <div class="thumbnail">
 <img data-src="posts/2020-06-10-what-technical-skills-matter/preview.jpg"/>
 </div>
 <div class="description">
 <h2>What technical skills matter?</h2>
+<div class="dt-tags">
+<div class="dt-tag">other</div>
+</div>
 <p>Find or become a T-shaped developer with the 20% you need 80% of the time</p>
 </div>
 </a>
@@ -1916,12 +1858,19 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["r2dii","package"]}</script>
 <div class="metadata">
 <div class="publishedDate">June 5, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Mauro Lepore</div>
+</div>
 </div>
 <div class="thumbnail">
 <img data-src="posts/2020-06-05-r2dii-match-0-0-2/preview.jpg"/>
 </div>
 <div class="description">
 <h2>r2dii.match 0.0.2 is now on CRAN</h2>
+<div class="dt-tags">
+<div class="dt-tag">r2dii</div>
+<div class="dt-tag">package</div>
+</div>
 <p>It's compatible with R back to 3.4, and dplyr 0.8.5; but update ASAP!</p>
 </div>
 </a>
@@ -1929,12 +1878,19 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["r2dii","package"]}</script>
 <div class="metadata">
 <div class="publishedDate">June 3, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Mauro Lepore</div>
+</div>
 </div>
 <div class="thumbnail">
 <img data-src="posts/2020-06-03-r2dii-data-0-1-0/preview.jpg"/>
 </div>
 <div class="description">
 <h2>r2dii.data 0.1.0 is now on CRAN</h2>
+<div class="dt-tags">
+<div class="dt-tag">r2dii</div>
+<div class="dt-tag">package</div>
+</div>
 <p>This release includes new and improved datasets.</p>
 </div>
 </a>
@@ -1942,12 +1898,19 @@ several bugfixes.</p>
 <script class="post-metadata" type="text/json">{"categories":["meta","ds-incubator"]}</script>
 <div class="metadata">
 <div class="publishedDate">June 2, 2020</div>
+<div class="dt-authors">
+<div class="dt-author">Mauro Lepore</div>
+</div>
 </div>
 <div class="thumbnail">
 <img data-src="posts/2020-06-02-shape-and-share-your-thoughts-here/preview.jpg"/>
 </div>
 <div class="description">
 <h2>Shape and share your thoughts here</h2>
+<div class="dt-tags">
+<div class="dt-tag">meta</div>
+<div class="dt-tag">ds-incubator</div>
+</div>
 <p>"If you think without writing, you only think you're thinking" -- Leslie Lamport.</p>
 </div>
 </a>
@@ -1957,51 +1920,55 @@ several bugfixes.</p>
 <h3>Categories</h3>
 <ul>
 <li>
-<a href="#community">community</a>
+<a href="#category:Articles">Articles</a>
+<span class="category-count">(19)</span>
+</li>
+<li>
+<a href="#category:community">community</a>
 <span class="category-count">(3)</span>
 </li>
 <li>
-<a href="#ds-incubator">ds-incubator</a>
+<a href="#category:ds-incubator">ds-incubator</a>
 <span class="category-count">(2)</span>
 </li>
 <li>
-<a href="#favorites">favorites</a>
+<a href="#category:favorites">favorites</a>
 <span class="category-count">(2)</span>
 </li>
 <li>
-<a href="#meta">meta</a>
+<a href="#category:meta">meta</a>
 <span class="category-count">(2)</span>
 </li>
 <li>
-<a href="#other">other</a>
+<a href="#category:other">other</a>
 <span class="category-count">(5)</span>
 </li>
 <li>
-<a href="#package">package</a>
-<span class="category-count">(7)</span>
+<a href="#category:package">package</a>
+<span class="category-count">(8)</span>
 </li>
 <li>
-<a href="#PACTA_analysis">PACTA_analysis</a>
+<a href="#category:PACTA_analysis">PACTA_analysis</a>
 <span class="category-count">(1)</span>
 </li>
 <li>
-<a href="#programming">programming</a>
+<a href="#category:programming">programming</a>
 <span class="category-count">(2)</span>
 </li>
 <li>
-<a href="#r2dii">r2dii</a>
-<span class="category-count">(10)</span>
+<a href="#category:r2dii">r2dii</a>
+<span class="category-count">(11)</span>
 </li>
 <li>
-<a href="#release">release</a>
+<a href="#category:release">release</a>
 <span class="category-count">(2)</span>
 </li>
 <li>
-<a href="#scenarios">scenarios</a>
+<a href="#category:scenarios">scenarios</a>
 <span class="category-count">(1)</span>
 </li>
 <li>
-<a href="#software_development">software development</a>
+<a href="#category:software_development">software development</a>
 <span class="category-count">(1)</span>
 </li>
 </ul>
