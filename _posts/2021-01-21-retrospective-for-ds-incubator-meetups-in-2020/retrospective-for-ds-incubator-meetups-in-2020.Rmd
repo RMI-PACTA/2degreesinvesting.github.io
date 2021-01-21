@@ -1,0 +1,104 @@
+---
+title: "The ds-incubator: Reflecting on 2020 to plan 2021"
+description: |
+  Responding to a group retrospective
+author:
+  - name: Mauro Lepore
+    url: https://github.com/maurolepore
+base_url: https://2degreesinvesting.github.io/
+date: 01-21-2021
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
+    self_contained: true
+categories:
+  - ds-incubator
+  - community
+preview: preview.jpg
+twitter:
+  site: "@jdhoffart"
+  creator: "@jdhoffart"
+---
+
+The first ds-incubator meetup of 2021 was a retrospective. I consulted 2DII
+folks on (a) what went well, (b) what didn't go so well, and (c) how can the
+ds-incubator improve. I also asked if the ds-incubator had any effect in the way
+we now work at 2DII. Based on that feedback, here I present and discuss the
+decisions I made.
+
+## Decisions
+
+* Nominate a timekeeper to help end on time.
+
+* Use "[round of
+voices](https://www.oreilly.com/library/view/the-discussion-book/9781119049715/c01.xhtml)"
+to encourage a critical discussion and practice dialogue^[Dialogue here is used
+as described in [Crucial
+Conversations](https://www.amazon.com/s?k=crucial+conversations&language=es_US&adgrpid=72115379888&gclid=CjwKCAiA6aSABhApEiwA6Cbm_44mqB3tsinu7EvRbDoOfX0F5VyB2C3CMQ46dnnA9dWrQfPdwijFihoCjb8QAvD_BwE&hvadid=374753062989&hvdev=c&hvlocphy=9061129&hvnetw=g&hvqmt=e&hvrand=2161262227879169474&hvtargid=kwd-131243222&hydadcr=2880_11204470&tag=gspstddesk-20&ref=pd_sl_24xsl5xd97_e),
+where the pool of meaning expands when everyone shares their opinion, rather
+than keeping silent or getting violent.].
+
+* Although stand-alone meetups are welcome, prefer meetup-series. This makes it
+easy for the leader to prepare and for attendees to follow. Regarding
+meetup-series:
+   * Vote to choose the topic.
+   * Develop a syllabus.
+   * Start each meetup reminding the syllabus and requirements (maybe none).
+
+* Deprecate the use of labels "must-have" and "nice-to-have". The
+[practices](https://2degreesinvesting.github.io/practices/) project is a better
+alternative.
+
+* Design content as a demo rather than an interactive workshop.
+
+* Articulate the relevance for the intended audience. Thrive to give concrete
+examples for 2DII.
+
+* Articulate what the audience can do to learn more, e.g. where to find
+materials to reproduce the contents of the lesson.
+
+## Trade-offs
+
+* __Schedule__. Do not change the time/day for now. While it'd be great to move
+the meetup to avoid meetings back-to-back, I fear losing frequent attendees.
+
+* __Demos versus interactive-tutorials__. There is good evidence showing that
+people learn better by doing something than by seeing someone else do something;
+yet, I trade the benefit of interactive lessons for the benefit of demos:
+covering more material in the same amount of time. This seems particularly
+appropriate given that the audience does not directly choose the meetup topic,
+and thus some topics they may only want to "hear about". If they are indeed
+motivated, the demo should guide them to learn more.
+
+* __Interactive workshop__. A longer workshop is an idea I like and developed
+(e.g. [tidy-ds](https://github.com/2DegreesInvesting/tidy-ds)), but I think it
+complements rather than replace the ds-incubator. Workshops take a long time to
+prepare so they are a slower way to respond to "the challenge at hand" that we
+experience at 2DII.
+
+* __Relevance__. It's hard to develop an example that is realistic yet simple
+enough to not burry general concepts in specific details. Another challenge is
+that the intended audience is not just 2DII but also beyond. The broader
+relevance should make the content more appealing to you and me -- to you because
+it's a skill you can transfer elsewhere, and to me because content that helps
+folks outside 2DII allows me to give back to the R community what I learned from
+it.
+
+## Conclusion
+
+* __Meta__. The retrospective helped me make informed decisions. 
+
+* __Structure__. Meetups could benefit from a bit more structure, and guide from
+the [meetup
+template](https://github.com/2DegreesInvesting/ds-incubator/blob/master/.github/ISSUE_TEMPLATE/ds-incubator-meetup.md).
+
+* __Relevance__. The effect of the ds-incubator seems to be not great on its own
+but important in adding to the compound effect of multiple efforts -- of which
+the ds-incubator is only one.
+
+## Discussion
+
+The retrospective finished with two round of voices: The first one to comment on
+what's written above, and the second one to suggest meetup topics for 2021 --
+which I followed up with a poll on Slack.
