@@ -67,6 +67,7 @@ We are working on multiple projects you may want to know about:
 * [resources](https://2degreesinvesting.github.io/resources/): A place to explore and share resources.
 * [coding-helpdesk](https://2degreesinvesting.github.io/coding-helpdesk): Live support by appointment.
 * [r2dii](https://2degreesinvesting.github.io/r2dii/index.html): A collection of R packages we maintain.
+* [dev-hangout](https://github.com/2DegreesInvesting/resources/issues/252): Weekly discussion of wider coding related topics.
 
 ----
 
