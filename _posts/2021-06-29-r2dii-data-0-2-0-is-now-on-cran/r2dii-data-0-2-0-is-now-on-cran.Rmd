@@ -30,7 +30,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-r2dii.data 0.2.0 is now on CRAN. This release fixes a number of bugs that you can learn about [here](https://2degreesinvesting.github.io/r2dii.data/news/index.html); this post shows enhancements and new features.
+r2dii.data 0.2.0 is now on CRAN. This release fixes a number of bugs that you
+can learn about
+[here](https://2degreesinvesting.github.io/r2dii.data/news/index.html); this
+post shows enhancements and new features.
 
 You can install it from CRAN with:
 
@@ -45,27 +48,36 @@ library(r2dii.data)
 library(r2dii.match)
 ```
 
-The most notable update in this release relates to changes in the demonstration dataset `ald_demo`. This data is meant to reflect a dataset that is provided to users by the organization [Asset Resolution](https://asset-resolution.com/).
+The most notable update in this release relates to changes in the demonstration
+dataset `ald_demo`. This data is meant to reflect a dataset that is provided to
+users by the organization [Asset Resolution](https://asset-resolution.com/).
 
-### `ald_demo` gains a column, loses a column an has two renamed
+### `ald_demo` gains a column, loses a column, and has two renamed
 
-`ald_demo` gains the new column `lei`, loses the column `is_ultimate_listed_owner` and has two columns renamed: 
-* `id_company` becomes `company_id`
-* `ald_emission_factor_unit` becomes `emission_factor_unit`
+`ald_demo` gains the new column `lei`, loses the column
+`is_ultimate_listed_owner`, and has two columns renamed:
 
-The new column `lei` contains fake legal entity identifiers for some companies in `ald_demo`: 
+* `id_company` becomes `company_id`.
+* `ald_emission_factor_unit` becomes `emission_factor_unit`.
+
+The new column `lei` contains fake legal entity identifiers for some companies
+in `ald_demo`:
 
 ``` {r} 
 head(unique(ald_demo$lei))
 ```
 
-Changes to the other columns are simply cosmetic, and meant to better reflect the actual dataset that will be delivered to users. 
+Changes to the other columns are simply cosmetic, and meant to better reflect
+the actual dataset that will be delivered to users.
 
-Since these fields are not currently used in the downstream packages `r2dii.match` and `r2dii.analysis`, it is not expected that this should negatively affect users in a significant way. 
+Since these fields are not currently used in the downstream packages
+`r2dii.match` and `r2dii.analysis`, it is not expected that this should
+negatively affect users in a significant way.
 
 ### `ald_demo` gains a new sector `hdv`
 
-`ald_demo` also gains datapoints relating to the newly added Heavy-Duty Vehicle sector (abbreviated to `hdv`). 
+`ald_demo` also gains data points relating to the newly added sector Heavy-Duty
+Vehicle (`hdv`).
 
 ``` {r}
 head(ald_demo[ald_demo$sector == "hdv", ])
