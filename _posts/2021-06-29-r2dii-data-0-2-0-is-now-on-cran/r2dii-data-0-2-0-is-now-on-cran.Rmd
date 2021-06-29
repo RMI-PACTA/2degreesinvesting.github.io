@@ -6,7 +6,7 @@ author:
   - name: Jackson Hoffart
     url: https://github.com/jdhoffa
 base_url: https://2degreesinvesting.github.io/
-date: 2021-06-18
+date: 2021-06-29
 output: 
   distill::distill_article:
     toc: true

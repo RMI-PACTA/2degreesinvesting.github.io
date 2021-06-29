@@ -15,6 +15,7 @@ output:
 categories:
   - r2dii
   - package
+  - release
 preview: preview.jpg
 twitter:
   site: "@mauro_lepore"
