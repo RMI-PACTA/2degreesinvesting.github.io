@@ -68,5 +68,5 @@ Since these fields are not currently used in the downstream packages `r2dii.matc
 `ald_demo` also gains datapoints relating to the newly added Heavy-Duty Vehicle sector (abbreviated to `hdv`). 
 
 ``` {r}
-head(ald_demo[ald_demo$sector == "hdv",])
+head(ald_demo[ald_demo$sector == "hdv", ])
 ```
