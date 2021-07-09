@@ -1457,7 +1457,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"r2dii.data 0.2.0 is now on CRAN","description":"Signifcant changes to `ald_demo`","authors":[{"author":"Jackson Hoffart","authorURL":"https://github.com/jdhoffa","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-06-29T00:00:00.000-06:00","citationText":"Hoffart, 2021"}
+{"title":"r2dii.data 0.2.0 is now on CRAN","description":"Signifcant changes to `ald_demo`","authors":[{"author":"Jackson Hoffart","authorURL":"https://github.com/jdhoffa","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-06-29T00:00:00.000+00:00","citationText":"Hoffart, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1518,24 +1518,32 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <pre class="sourceCode r"><code class="sourceCode r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">ald_demo</span><span class="op">$</span><span class="va">lei</span><span class="op">)</span><span class="op">)</span>
 </code></pre>
 </div>
-<pre><code>#&gt; NULL</code></pre>
+<pre><code>#&gt; [1] &quot;836000XMDHWKK968EK48&quot; &quot;455700GSGBA02FV7WZ58&quot;
+#&gt; [3] &quot;496300U7J971S488HF87&quot; &quot;722600T1N0JYQ1V4EL40&quot;
+#&gt; [5] &quot;188800KT6I2BFPQ8LR94&quot; &quot;497300211XTQ2K7LW961&quot;</code></pre>
 </div>
 <p>Changes to the other columns are simply cosmetic, and meant to better reflect the actual dataset that will be delivered to users.</p>
 <p>Since these fields are not currently used in the downstream packages <code>r2dii.match</code> and <code>r2dii.analysis</code>, it is not expected that this should negatively affect users in a significant way.</p>
 <h3 id="ald_demo-gains-a-new-sector-hdv"><code>ald_demo</code> gains a new sector <code>hdv</code></h3>
-<p><code>ald_demo</code> also gains datapoints relating to the newly added sector Heavy-Duty Vehicle (<code>hdv</code>).</p>
+<p><code>ald_demo</code> also gains data points relating to the newly added sector Heavy-Duty Vehicle (<code>hdv</code>).</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ald_demo</span><span class="op">[</span><span class="va">ald_demo</span><span class="op">$</span><span class="va">sector</span> <span class="op">==</span> <span class="st">&quot;hdv&quot;</span>, <span class="op">]</span><span class="op">)</span>
 </code></pre>
 </div>
-<pre><code>#&gt; # A tibble: 0 x 14
-#&gt; # … with 14 variables: id_company &lt;chr&gt;, name_company &lt;chr&gt;,
-#&gt; #   sector &lt;chr&gt;, technology &lt;chr&gt;, production_unit &lt;chr&gt;,
-#&gt; #   year &lt;int&gt;, production &lt;dbl&gt;, emission_factor &lt;dbl&gt;,
-#&gt; #   country_of_domicile &lt;chr&gt;, plant_location &lt;chr&gt;,
-#&gt; #   is_ultimate_owner &lt;lgl&gt;, is_ultimate_listed_owner &lt;lgl&gt;,
-#&gt; #   ald_timestamp &lt;chr&gt;, ald_emission_factor_unit &lt;chr&gt;</code></pre>
+<pre><code>#&gt; # A tibble: 6 x 14
+#&gt;   company_id name_company lei        sector technology production_unit
+#&gt;   &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;          
+#&gt; 1 396        scania       890300GW0… hdv    electric   cars produced  
+#&gt; 2 396        scania       890300GW0… hdv    electric   cars produced  
+#&gt; 3 396        scania       890300GW0… hdv    electric   cars produced  
+#&gt; 4 396        scania       890300GW0… hdv    electric   cars produced  
+#&gt; 5 396        scania       890300GW0… hdv    electric   cars produced  
+#&gt; 6 396        scania       890300GW0… hdv    electric   cars produced  
+#&gt; # … with 8 more variables: year &lt;int&gt;, production &lt;dbl&gt;,
+#&gt; #   emission_factor &lt;dbl&gt;, country_of_domicile &lt;chr&gt;,
+#&gt; #   plant_location &lt;chr&gt;, is_ultimate_owner &lt;lgl&gt;,
+#&gt; #   ald_timestamp &lt;chr&gt;, emission_factor_unit &lt;chr&gt;</code></pre>
 </div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
