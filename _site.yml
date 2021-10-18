@@ -1,12 +1,8 @@
-name: "Data Science at 2DII"
-title: "Data Science at 2DII"
-favicon: images/favicon.png
+name: "Data science at 2DII"
+title: "Data science at 2DII"
 base_url: https://2degreesinvesting.github.io/
 output_dir: "."
 navbar:
-  logo: 
-    image: images/logo.png
-    href: https://2degreesinvesting.github.io/
   right:
     - text: "Home"
       href: index.html
@@ -28,3 +24,4 @@ twitter:
 output: 
   distill::distill_article:
     css: styles.css
+    theme: flatly
