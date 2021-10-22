@@ -31,7 +31,8 @@ knitr::opts_chunk$set(
 ```
 
 The goal of this post is to help you release an R package to CRAN. It works
-whether you use the GitHub workflow or the Gitflow workflow.
+whether you use the GitHub workflow or the Gitflow workflow
+([video](https://youtu.be/3glCxjn7xnU)).
 
 ### Prepare for release
 
