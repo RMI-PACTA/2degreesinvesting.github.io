@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  rstudio:
+    image: maurolepore/2dii_blog:0.0.0
+    ports:
+      - 8787:8787
+    environment:
+    - PASSWORD=123
+    volumes:
+      - .:/home/rstudio/2degreesinvesting.github.io
