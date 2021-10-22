@@ -1,5 +1,24 @@
 [
   {
+    "path": "posts/2021-10-22-workflow-to-release-an-r-package-to-cran/",
+    "title": "Workflow to release an R package to CRAN",
+    "description": "A guide for users of both the GitHub worflow and Gitflow workflow.",
+    "author": [
+      {
+        "name": "Mauro Lepore",
+        "url": "https://github.com/maurolepore"
+      }
+    ],
+    "date": "2021-10-22",
+    "categories": [
+      "r2dii",
+      "package",
+      "release"
+    ],
+    "preview": "posts/2021-10-22-workflow-to-release-an-r-package-to-cran/preview.jpg",
+    "last_modified": "2021-10-22T20:21:38+00:00"
+  },
+  {
     "path": "posts/2021-10-18-r2dii-plot-0-2-0/",
     "title": "r2dii.plot 0.2.0 is now on CRAN",
     "description": "New styling functions, arguments, and helpers.",
@@ -16,7 +35,7 @@
       "release"
     ],
     "preview": "posts/2021-10-18-r2dii-plot-0-2-0/preview.jpg",
-    "last_modified": "2021-10-18T20:18:34+00:00"
+    "last_modified": "2021-10-18T20:20:32+00:00"
   },
   {
     "path": "posts/2021-06-29-r2dii-data-0-2-0-is-now-on-cran/",
