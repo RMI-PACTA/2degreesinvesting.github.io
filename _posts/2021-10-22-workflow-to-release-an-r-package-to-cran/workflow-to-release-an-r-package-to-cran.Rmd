@@ -48,54 +48,45 @@ the section "CRAN release".
 
 [^2]: Ensure your remote `origin` points to the source repo (i.e. your remote setup is "[Ours](https://happygitwithr.com/common-remote-setups.html)"). This will fail if your remote `origin` points elsewhere (e.g. your fork).
 
-* Create a new feature/branch[^3] (e.g. `prepare-v0.0.1`) and follow the release
-checklist until the end of the section "Prepare for release"
+* Create a new branch off the default branch[^3] (e.g. `prepare-v0.0.1`) and
+follow the release checklist until the end of the section "Prepare for release"
 ([tweaks](https://github.com/2DegreesInvesting/resources/issues/198)).
 
-[^3]: This branch is special only in the [gitflow
-workflow](https://nvie.com/posts/a-successful-git-branching-model/); in the
-[github workflow](https://guides.github.com/introduction/flow/) it's just like
-any branch other than `master`.
+[^3]: Usually the default branch is `master` or `main` in the GitHub workflow
+and `develop` in the Gitflow workflow.
 
 ### Did anything change?
 
-* **Yes** -- the package is not ready for release yet:
+* **Yes** -- the current branch is not ready for release yet:
 
-    * Merge the feature/branch and repeat the main steps under "Prepare for
-    release" until doing so changes nothing.
+    * Merge the branch into the default branch and repeat the main steps under
+    "Prepare for release" until doing so changes nothing.
 
-* **No** -- the package is ready for release: 
+* **No** -- the current branch is ready for submission: 
 
-    *  Delete the feature/branch `prepare-v0.0.1` and create a release/branch
-    `v0.0.1`[^3].
+    *  Rename the branch to `v0.0.1`.
     
     *  Increment the version number with `usethis::use_version()`.
     
-    *  Submit a pull request based on `master` and confirm clean CI.
+    *  Submit a release PR into `master` and confirm clean CI.
     
     * `devtools::submit_cran()`. This adds CRAN-RELEASE -- delete it.
+    
+    * Checkout the default branch and increment the version to `v0.0.1.9000`.
+    
+    * Continue development on the default branch.
+    
+### Did CRAN publish the release?
 
-### Create GitHub release
+* **No**: Close the release PR into `master`.
 
-Regardless of CRAN create a GitHub release:
-
-* Merge the release branch into `master`, checkout `master`, and run
+* **Yes**: Merge the release PR into `master` and run
 `usethis::use_github_release()`[^2] to create a new tag `v0.0.1`[^4] and a
-corresponding GitHub release.
+corresponding GitHub release. If you're using the gitflow workflow merge the
+branch `v0.0.1` into `develop`.
 
 [^4]: The [`git flow`](https://github.com/nvie/gitflow) extension prompts you to
 enter the tag manually. Use the form `vx.y.z` like
 `usethis::use_github_release()` does. This avoids tagging the same commit twice.
 
-* If you're using the [gitflow
-workflow](https://nvie.com/posts/a-successful-git-branching-model/), ensure the
-release branch is also merged into `develop`[^5] and checkout `develop` now.
-
-[^5]: The [`git flow`](https://github.com/nvie/gitflow) merges release features
-automatically into both `master` and `devleop` (see
-https://bit.ly/gitflow-table).
-
-* Increment the version number with `usethis::use_dev_version()`.
-
-You can continue development. If CRAN accepts the submission, then the new tag
-on `master` and GitHub release will also have a corresponding CRAN release.
+* Delete the release branch `v0.0.1`.
