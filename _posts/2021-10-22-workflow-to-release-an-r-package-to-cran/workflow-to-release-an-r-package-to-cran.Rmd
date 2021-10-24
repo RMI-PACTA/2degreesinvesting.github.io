@@ -102,6 +102,8 @@ release branch is also merged into `develop`[^5] and checkout `develop` now.
 automatically into both `master` and `devleop` (see
 https://bit.ly/gitflow-table).
 
+### Continue development
+
 * Increment the version number with `usethis::use_dev_version()`.
 
 You can continue development. If CRAN accepts the submission, then the new tag
