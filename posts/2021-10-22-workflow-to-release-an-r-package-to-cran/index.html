@@ -2406,51 +2406,56 @@ d-title {
 <ul>
 <li><a href="#prepare-for-release">Prepare for release</a></li>
 <li><a href="#did-anything-change">Did anything change?</a></li>
-<li><a href="#did-cran-publish-the-release">Did CRAN publish the release?</a></li>
+<li><a href="#create-github-release">Create GitHub release</a></li>
 </ul>
 </nav>
 <hr class="d-toc-separator" />
-<p>The goal of this post is to help you release an R package to CRAN. It works whether you use the GitHub workflow or the Gitflow workflow (<a href="https://youtu.be/nRV6oFmn_uM">video</a>).</p>
+<p>The goal of this post is to help you release an R package to CRAN. It works whether you use the <a href="https://guides.github.com/introduction/flow/">GitHub workflow</a> or the <a href="https://nvie.com/posts/a-successful-git-branching-model/">Gitflow workflow</a><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> (<a href="https://youtu.be/3glCxjn7xnU">video</a>).</p>
 <h3 id="prepare-for-release">Prepare for release</h3>
-<p>Consider the release of <a href="https://github.com/maurolepore/releaseworkflow">maurolepore/releaseworkflow</a> <code>v0.0.1</code><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+<p>Consider the release of <a href="https://github.com/maurolepore/releaseworkflow">maurolepore/releaseworkflow</a> <code>v0.0.1</code><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
 <ul>
-<li>Create a release checklist with <code>usethis::use_release_issue()</code><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</li>
+<li>Create a release checklist with <code>usethis::use_release_issue()</code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</li>
 </ul>
 <ul>
-<li>Create a new branch off the default branch<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> (e.g. <code>prepare-v0.0.1</code>) and follow the release checklist until the end of the section “Prepare for release” (<a href="https://github.com/2DegreesInvesting/resources/issues/198">tweaks</a>).</li>
+<li>Create a new feature/branch<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> (e.g. <code>prepare-v0.0.1</code>) and follow the release checklist until the end of the section “Prepare for release” (<a href="https://github.com/2DegreesInvesting/resources/issues/198">tweaks</a>).</li>
 </ul>
 <h3 id="did-anything-change">Did anything change?</h3>
 <ul>
-<li><p><strong>Yes</strong> – the current branch is not ready for release yet:</p>
+<li><p><strong>Yes</strong> – the package is not ready for release yet:</p>
 <ul>
-<li>Merge the branch into the default branch and repeat the main steps under “Prepare for release” until doing so changes nothing.</li>
+<li>Merge the feature/branch and repeat the main steps under “Prepare for release” until doing so changes nothing.</li>
 </ul></li>
-<li><p><strong>No</strong> – the current branch is ready for submission:</p>
+<li><p><strong>No</strong> – the package is ready for release:</p>
 <ul>
-<li><p>Rename the branch to <code>v0.0.1</code>.</p></li>
+<li><p>Delete the feature/branch <code>prepare-v0.0.1</code> and create a release/branch <code>v0.0.1</code><a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>.</p></li>
 <li><p>Increment the version number with <code>usethis::use_version()</code>.</p></li>
-<li><p>Submit a release PR into <code>master</code> and confirm clean CI.</p></li>
+<li><p>Submit a pull request based on <code>master</code> and confirm clean CI.</p></li>
 <li><p><code>devtools::submit_cran()</code>. This adds CRAN-RELEASE – delete it.</p></li>
-<li><p>Checkout the default branch and increment the version to <code>v0.0.1.9000</code>.</p></li>
-<li><p>Continue development on the default branch.</p></li>
 </ul></li>
 </ul>
-<h3 id="did-cran-publish-the-release">Did CRAN publish the release?</h3>
+<h3 id="create-github-release">Create GitHub release</h3>
+<p>Regardless of CRAN create a GitHub release:</p>
 <ul>
-<li><p><strong>No</strong>: Close the release PR into <code>master</code>.</p></li>
-<li><p><strong>Yes</strong>: Merge the release PR into <code>master</code> and run <code>usethis::use_github_release()</code><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> to create a new tag <code>v0.0.1</code><a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> and a corresponding GitHub release. If you’re using the gitflow workflow merge the branch <code>v0.0.1</code> into <code>develop</code>.</p></li>
+<li>Merge the release branch into <code>master</code>, checkout <code>master</code>, and run <code>usethis::use_github_release()</code><a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> to create a new tag <code>v0.0.1</code><a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> and a corresponding GitHub release.</li>
 </ul>
 <ul>
-<li>Delete the release branch <code>v0.0.1</code>.</li>
+<li>If you’re using the <a href="https://nvie.com/posts/a-successful-git-branching-model/">gitflow workflow</a>, ensure the release branch is also merged into <code>develop</code><a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a> and checkout <code>develop</code> now.</li>
 </ul>
+<ul>
+<li>Increment the version number with <code>usethis::use_dev_version()</code>.</li>
+</ul>
+<p>You can continue development. If CRAN accepts the submission, then the new tag on <code>master</code> and GitHub release will also have a corresponding CRAN release.</p>
 <section class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>See Mauro’s <a href="https://github.com/maurolepore/dotfiles/blob/master/aliases.zsh">aliases</a> under the section “CRAN release”.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>Ensure your remote <code>origin</code> points to the source repo (i.e. your remote setup is “<a href="https://happygitwithr.com/common-remote-setups.html">Ours</a>”). This will fail if your remote <code>origin</code> points elsewhere (e.g. your fork).<a href="#fnref2" class="footnote-back">↩</a></p></li>
-<li id="fn3"><p>Usually the default branch is <code>master</code> or <code>main</code> in the GitHub workflow and <code>develop</code> in the Gitflow workflow.<a href="#fnref3" class="footnote-back">↩</a></p></li>
-<li id="fn4"><p>Ensure your remote <code>origin</code> points to the source repo (i.e. your remote setup is “<a href="https://happygitwithr.com/common-remote-setups.html">Ours</a>”). This will fail if your remote <code>origin</code> points elsewhere (e.g. your fork).<a href="#fnref4" class="footnote-back">↩</a></p></li>
-<li id="fn5"><p>The <a href="https://github.com/nvie/gitflow"><code>git flow</code></a> extension prompts you to enter the tag manually. Use the form <code>vx.y.z</code> like <code>usethis::use_github_release()</code> does. This avoids tagging the same commit twice.<a href="#fnref5" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>If you use the Gitflow workflow, this article assumes you a) use the <a href="https://github.com/nvie/gitflow"><code>git flow</code></a> extension and b) have privileges to push to <code>origin/master</code> and <code>origin/develop</code>.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>See Mauro’s <a href="https://github.com/maurolepore/dotfiles/blob/master/aliases.zsh">aliases</a> under the section “CRAN release”.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Ensure your remote <code>origin</code> points to the source repo (i.e. your remote setup is “<a href="https://happygitwithr.com/common-remote-setups.html">Ours</a>”). This will fail if your remote <code>origin</code> points elsewhere (e.g. your fork).<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>This branch is special only in the <a href="https://nvie.com/posts/a-successful-git-branching-model/">gitflow workflow</a>; in the <a href="https://guides.github.com/introduction/flow/">github workflow</a> it’s just like any branch other than <code>master</code>.<a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p>This branch is special only in the <a href="https://nvie.com/posts/a-successful-git-branching-model/">gitflow workflow</a>; in the <a href="https://guides.github.com/introduction/flow/">github workflow</a> it’s just like any branch other than <code>master</code>.<a href="#fnref5" class="footnote-back">↩</a></p></li>
+<li id="fn6"><p>Ensure your remote <code>origin</code> points to the source repo (i.e. your remote setup is “<a href="https://happygitwithr.com/common-remote-setups.html">Ours</a>”). This will fail if your remote <code>origin</code> points elsewhere (e.g. your fork).<a href="#fnref6" class="footnote-back">↩</a></p></li>
+<li id="fn7"><p>The <a href="https://github.com/nvie/gitflow"><code>git flow</code></a> extension prompts you to enter the tag manually. Use the form <code>vx.y.z</code> like <code>usethis::use_github_release()</code> does. This avoids tagging the same commit twice.<a href="#fnref7" class="footnote-back">↩</a></p></li>
+<li id="fn8"><p>The <a href="https://github.com/nvie/gitflow"><code>git flow</code></a> merges release features automatically into both <code>master</code> and <code>devleop</code> (see <a href="https://bit.ly/gitflow-table" class="uri">https://bit.ly/gitflow-table</a>).<a href="#fnref8" class="footnote-back">↩</a></p></li>
 </ol>
 </section>
 <!--radix_placeholder_article_footer-->
