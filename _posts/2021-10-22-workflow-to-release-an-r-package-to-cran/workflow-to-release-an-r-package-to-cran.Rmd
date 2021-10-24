@@ -32,7 +32,8 @@ knitr::opts_chunk$set(
 
 The goal of this post is to help you release an R package to CRAN. It works
 whether you use the [GitHub
-workflow](https://guides.github.com/introduction/flow/) or the [Gitflow
+workflow](https://guides.github.com/introduction/flow/)
+([video](https://youtu.be/WuB-RV7tigc)) or the [Gitflow
 workflow](https://nvie.com/posts/a-successful-git-branching-model/)[^6]
 ([video](https://youtu.be/y6wY9ERBA4I)).
 
