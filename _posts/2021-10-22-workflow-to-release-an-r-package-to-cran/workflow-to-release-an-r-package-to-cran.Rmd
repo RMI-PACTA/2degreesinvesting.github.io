@@ -34,7 +34,7 @@ The goal of this post is to help you release an R package to CRAN. It works
 whether you use the [GitHub
 workflow](https://guides.github.com/introduction/flow/) or the [Gitflow
 workflow](https://nvie.com/posts/a-successful-git-branching-model/)[^6]
-([video](https://youtu.be/3glCxjn7xnU)).
+([video](https://youtu.be/y6wY9ERBA4I)).
 
 [^6]: If you use the Gitflow workflow, this article assumes you a) use the [`git
 flow`](https://github.com/nvie/gitflow) extension and b) have privileges to push
