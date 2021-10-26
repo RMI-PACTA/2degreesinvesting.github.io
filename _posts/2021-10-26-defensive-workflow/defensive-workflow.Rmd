@@ -1,28 +1,36 @@
 ---
-title: "Defensive workflow"
+title: "Onboarding to a defensive workflow"
 description: |
-  A guide for users of both the GitHub worflow and Gitflow workflow.
+  The minimum elements of a defensive workflow and links to learn more.
 author:
   - name: Mauro Lepore
     url: https://github.com/maurolepore
 base_url: https://2degreesinvesting.github.io/
-date: 2021-10-22
+date: 2021-10-26
 output: 
   distill::distill_article:
     toc: true
     toc_depth: 3
     self_contained: true
 categories:
-  - r2dii
-  - package
-  - release
+  - community
+  - onboarding
+  - ds-incubator
 preview: preview.jpg
 twitter:
   site: "@mauro_lepore"
   creator: "@mauro_lepore"
 ---
 
-This article overviews the mimimum elements of a defensive workflow and points
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This article overviews the minimum elements of a defensive workflow and points
 you to resources to learn more. It should be useful in at least two cases:
 a. You want to learn how we work at 2DII.
 b. You suspect you've drifted into habits that slow you down or make your work
@@ -64,20 +72,24 @@ Find your project's files with `here()`.
 files relative to your project root. 
 -- https://here.r-lib.org/reference/here.html
 
+```{r}
+library(here)
 
-```{r error = TRUE}
-# Good
-path <- here::here("data", "greeting.txt")
-path
-readLines(path)
-
-# Bad
-path <- "/a/fragile path/that/only/i/have/data/greeting.txt"
+(path <- here("_posts", "2021-10-26-defensive-workflow", "data", "greeting.txt"))
 readLines(path)
 ```
 
-[How to name files](https://rstats.wtf/how-to-name-files.html):
+This is bad. It makes your analysis not reproducible:
+
+```{r error=TRUE}
+(path <- "/a/fragile path/that/only/i/have/data/greeting.txt")
+readLines(path)
+```
+
+### [How to name files](https://rstats.wtf/how-to-name-files.html)
+
+Name your files following these guidelines:
 
 <img src=https://i.imgur.com/Lo7JFxc.png width=700>
 
-https://speakerdeck.com/jennybc/how-to-name-files?slide=3
+https://speakerdeck.com/jennybc/how-to-name-files
