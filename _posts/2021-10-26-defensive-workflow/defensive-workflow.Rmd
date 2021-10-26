@@ -1,0 +1,83 @@
+---
+title: "Defensive workflow"
+description: |
+  A guide for users of both the GitHub worflow and Gitflow workflow.
+author:
+  - name: Mauro Lepore
+    url: https://github.com/maurolepore
+base_url: https://2degreesinvesting.github.io/
+date: 2021-10-22
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
+    self_contained: true
+categories:
+  - r2dii
+  - package
+  - release
+preview: preview.jpg
+twitter:
+  site: "@mauro_lepore"
+  creator: "@mauro_lepore"
+---
+
+This article overviews the mimimum elements of a defensive workflow and points
+you to resources to learn more. It should be useful in at least two cases:
+a. You want to learn how we work at 2DII.
+b. You suspect you've drifted into habits that slow you down or make your work
+more brittle (https://rstats.wtf/).
+
+Tip: You're about to read read about a number of RStudio commands like "Restart
+R session". To search them pop up the commands bar with Shift + Ctrl/Cmd + P and
+start typing.
+
+<img src=https://i.imgur.com/U0xpz75.png width = 600>
+
+### [Setup RStudio to start from a blank slate every time you restart R](https://rstats.wtf/save-source.html)
+
+Use these configurations:
+
+* Save workspace on quit: Never.
+* Load workspace on start: Off.
+
+Instead you can run `usethis::use_blank_slate()` and follow the instructions.
+
+Then restart R often to confirm you can reproduce your results from a blank
+slate.
+
+### [Use RStudio projects](https://rstats.wtf/project-oriented-workflow.html#rstudio-projects):
+
+RStudio helps you easily create a new project. Instead you can run
+`usethis::use_rstudio()`.
+
+RStudio can also browse and launch recent and older projects, but it's easiest
+to use a dedicated app like Alfred.
+
+<img src=https://i.imgur.com/2TwTbpy.png width=500>
+
+### [Practice safe paths](https://rstats.wtf/safe-paths.html)
+
+Find your project's files with `here()`.
+
+> Use it as a drop-in replacement for file.path(), it will always locate the
+files relative to your project root. 
+-- https://here.r-lib.org/reference/here.html
+
+
+```{r error = TRUE}
+# Good
+path <- here::here("data", "greeting.txt")
+path
+readLines(path)
+
+# Bad
+path <- "/a/fragile path/that/only/i/have/data/greeting.txt"
+readLines(path)
+```
+
+[How to name files](https://rstats.wtf/how-to-name-files.html):
+
+<img src=https://i.imgur.com/Lo7JFxc.png width=700>
+
+https://speakerdeck.com/jennybc/how-to-name-files?slide=3
