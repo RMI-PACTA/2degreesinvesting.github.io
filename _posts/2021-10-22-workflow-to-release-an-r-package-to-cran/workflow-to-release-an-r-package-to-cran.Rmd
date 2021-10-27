@@ -16,6 +16,7 @@ categories:
   - r2dii
   - package
   - release
+  - workflow
 preview: preview.jpg
 twitter:
   site: "@mauro_lepore"

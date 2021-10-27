@@ -16,6 +16,7 @@ categories:
   - community
   - onboarding
   - ds-incubator
+  - workflow
 preview: preview.jpg
 twitter:
   site: "@mauro_lepore"
