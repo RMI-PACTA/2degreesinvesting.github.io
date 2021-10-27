@@ -12,7 +12,6 @@ output:
     toc: true
     self_contained: true
 categories:
-  - other
   - scenarios
 preview: preview.png
 bibliography: references.bib

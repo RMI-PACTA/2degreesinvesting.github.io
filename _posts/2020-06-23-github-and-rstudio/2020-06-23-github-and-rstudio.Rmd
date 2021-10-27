@@ -14,6 +14,7 @@ output:
 categories:
   - community
   - onboarding
+  - workflow
 preview: preview.jpg
 twitter:
   site: "@mauro_lepore"
@@ -28,11 +29,22 @@ knitr::opts_chunk$set(
 )
 ```
 
-At 2DII we use a particular workflow -- a set of tools and practices. This post is about what you should know to work effectively with us, or whoever uses the same workflow.
+At 2DII we use a particular workflow -- a set of tools and practices. This post
+is about what you should know to work effectively with us, or whoever uses the
+same workflow.
+
+### Git workflows
+
+We use two Git workflows -- the [GitHub
+flow](https://guides.github.com/introduction/flow/), and the [Gitflow
+workflow](https://nvie.com/posts/a-successful-git-branching-model/). If you use
+the Gitflow workflow you may want to
+[use](https://jeffkreeftmeijer.com/git-flow/) the
+[`git-flow`](https://github.com/nvie/gitflow) extension.
 
 ### Introduction to GitHub
 
-We collaborate on GitHub, and embrace the so called [GitHub flow](https://guides.github.com/introduction/flow/). Whatever your experience with GitHub, you may like these resources:
+We collaborate on GitHub. Whatever your experience with GitHub, you may like these resources:
 
 * [What is GitHub?](https://youtu.be/w3jLJU7DT5E) (4' video).
 * [Introduction to GitHub](https://lab.github.com/githubtraining/introduction-to-github) (1-2 h tutorial from [GitHub Lab](https://youtu.be/9S0p8YMQzsM)).

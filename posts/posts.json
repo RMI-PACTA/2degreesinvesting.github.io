@@ -348,11 +348,12 @@
     ],
     "date": "2020-06-23",
     "categories": [
+      "community",
       "onboarding",
-      "community"
+      "workflow"
     ],
     "preview": "posts/2020-06-23-github-and-rstudio/preview.jpg",
-    "last_modified": "2021-10-26T21:03:24+00:00"
+    "last_modified": "2021-10-27T11:35:54+00:00"
   },
   {
     "path": "posts/2020-06-11-r2dii-analysis-release-candidate/",
