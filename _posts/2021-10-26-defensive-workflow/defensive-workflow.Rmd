@@ -31,58 +31,49 @@ knitr::opts_chunk$set(
 ```
 
 This article overviews the minimum elements of a defensive workflow and points
-you to resources to learn more. It should be useful in at least two cases:
-a. You want to learn how we work at 2DII.
-b. You suspect you've drifted into habits that slow you down or make your work
-more brittle (https://rstats.wtf/).
-
-Tip: You're about to read read about a number of RStudio commands like "Restart
-R session". To search them pop up the commands bar with Shift + Ctrl/Cmd + P and
-start typing.
-
-<img src=https://i.imgur.com/U0xpz75.png width = 600>
+you to resources to learn more. Beyond onboarding to 2DII, this article should
+be useful if you suspect you've drifted into habits that slow you down or make
+your work more brittle (https://rstats.wtf/).
 
 ### [Setup RStudio to start from a blank slate every time you restart R](https://rstats.wtf/save-source.html)
 
-Use these configurations:
+Use these settings:
 
-* Save workspace on quit: Never.
+* Save workspace on quit: Never[^1].
 * Load workspace on start: Off.
 
-Instead you can run `usethis::use_blank_slate()` and follow the instructions.
+[^1]: Shift + Ctrl/Cmd + P
+<img src=https://i.imgur.com/s1syyku.png width = 600>
 
-Then restart R often to confirm you can reproduce your results from a blank
-slate.
+Restart your R session often to confirm you can reproduce your results from a
+blank slate.
 
 ### [Use RStudio projects](https://rstats.wtf/project-oriented-workflow.html#rstudio-projects):
 
-RStudio helps you easily create a new project. Instead you can run
-`usethis::use_rstudio()`.
+RStudio makes it easy to create new projects[^2] and launch recent projects[^3].
+To launch older projects it's easiest to use a dedicated app like Alfred[^4].
 
-RStudio can also browse and launch recent and older projects, but it's easiest
-to use a dedicated app like Alfred.
-
-<img src=https://i.imgur.com/2TwTbpy.png width=500>
+[^2]: File > New Project
+[^3]: File > Recent Projects
+[^4]: <img src=https://i.imgur.com/2TwTbpy.png width=500>
 
 ### [Practice safe paths](https://rstats.wtf/safe-paths.html)
 
 Find your project's files with `here()`.
 
-> Use it as a drop-in replacement for file.path(), it will always locate the
-files relative to your project root. 
+> Use it as a drop-in replacement for `file.path()`, it will always locate the
+files relative to your project root.
 -- https://here.r-lib.org/reference/here.html
 
-```{r}
+```{r error=TRUE}
 library(here)
 
+# Good
 (path <- here("_posts", "2021-10-26-defensive-workflow", "data", "greeting.txt"))
 readLines(path)
-```
 
-This is bad. It makes your analysis not reproducible:
-
-```{r error=TRUE}
-(path <- "/a/fragile path/that/only/i/have/data/greeting.txt")
+# Bad
+(path <- "/a/brittle path/that/only/i/have/data/greeting.txt")
 readLines(path)
 ```
 
