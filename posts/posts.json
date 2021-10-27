@@ -13,10 +13,11 @@
     "categories": [
       "community",
       "onboarding",
-      "ds-incubator"
+      "ds-incubator",
+      "workflow"
     ],
     "preview": "posts/2021-10-26-defensive-workflow/preview.jpg",
-    "last_modified": "2021-10-27T12:08:55+00:00"
+    "last_modified": "2021-10-27T12:17:20+00:00"
   },
   {
     "path": "posts/2021-10-22-workflow-to-release-an-r-package-to-cran/",

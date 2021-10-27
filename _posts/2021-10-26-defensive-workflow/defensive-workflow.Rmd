@@ -32,9 +32,10 @@ knitr::opts_chunk$set(
 ```
 
 This article overviews the minimum elements of a defensive workflow and points
-you to resources to learn more. Beyond onboarding to 2DII, this article should
-be useful if you suspect you've drifted into habits that slow you down or make
-your work more brittle (https://rstats.wtf/).
+you to resources to learn more ([video](https://youtu.be/YlBnarQNRR8)). Beyond
+onboarding to 2DII, this article should be useful if you suspect you've drifted
+into habits that slow you down or make your work more brittle
+(https://rstats.wtf/).
 
 ### [Setup RStudio to start from a blank slate every time you restart R](https://rstats.wtf/save-source.html)
 
@@ -49,7 +50,7 @@ Use these settings:
 Restart your R session often to confirm you can reproduce your results from a
 blank slate.
 
-### [Use RStudio projects](https://rstats.wtf/project-oriented-workflow.html#rstudio-projects):
+### [Use RStudio projects](https://rstats.wtf/project-oriented-workflow.html#rstudio-projects)
 
 RStudio makes it easy to create new projects[^2] and launch recent projects[^3].
 To launch older projects it's easiest to use a dedicated app like Alfred[^4].
