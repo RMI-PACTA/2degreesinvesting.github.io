@@ -18,9 +18,12 @@ preview: preview.jpg
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  collapse = TRUE,
+  comment = "#>"
+)
 ```
-
 
 ### Introduction
 

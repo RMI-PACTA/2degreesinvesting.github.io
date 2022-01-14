@@ -17,6 +17,14 @@ categories:
 preview: preview.jpg
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
 The market share approach is a method for allocating macroeconomic carbon budgets translated into sectoral technology production pathways (e.g. the IEA scenarios) to microeconomic actors ^[Note that microeconomic actors are defined as companies but can also be defined as financial institutions. In which case the production of the companies is allocated to the financial institution’s based on either a Portfolio Weighted Approach or an Ownership Approach depending on the asset class. The same logic then applies to allocating macroeconomic carbon budgets and associated decarbonization efforts to the financial institution’s sectoral portfolios. More details on these approaches can be found in the PACTA for Banks methodology [here](https://www.transitionmonitor.com/pacta-for-banks-2020/methodology-and-supporting-materials/).] (e.g. a power company). In other words, it is an attempt to distribute the required global decarbonization efforts to those entities acting in the real economy.  
 
 **In the case of High Carbon technologies**, such as coal-fired power generation. The energy scenarios require a decrease or “phase down” in production.
