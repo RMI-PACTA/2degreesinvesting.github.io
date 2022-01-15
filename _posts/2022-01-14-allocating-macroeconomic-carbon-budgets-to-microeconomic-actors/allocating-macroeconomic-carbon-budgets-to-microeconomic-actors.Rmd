@@ -1,7 +1,7 @@
 ---
-title: Allocating Macroeconomic carbon budgets to Microeconomic actors
+title: Allocating Macroeconomic Carbon Budgets to Microeconomic Actors
 description: |
-  An application of the Market Share Approach.
+  An application of the market-share approach.
 author:
   - name: George Harris
     url: https://github.com/georgeharris2deg
@@ -25,24 +25,24 @@ knitr::opts_chunk$set(
 )
 ```
 
-The market share approach is a method for allocating macroeconomic carbon budgets translated into sectoral technology production pathways (e.g. the IEA scenarios) to microeconomic actors ^[Note that microeconomic actors are defined as companies but can also be defined as financial institutions. In which case the production of the companies is allocated to the financial institution’s based on either a Portfolio Weighted Approach or an Ownership Approach depending on the asset class. The same logic then applies to allocating macroeconomic carbon budgets and associated decarbonization efforts to the financial institution’s sectoral portfolios. More details on these approaches can be found in the PACTA for Banks methodology [here](https://www.transitionmonitor.com/pacta-for-banks-2020/methodology-and-supporting-materials/).] (e.g. a power company). In other words, it is an attempt to distribute the required global decarbonization efforts to those entities acting in the real economy.  
+The market-share approach is a method for allocating macroeconomic carbon budgets, translated into sectoral technology production pathways, to microeconomic actors ^[Note that microeconomic actors are defined as companies but can also be defined as financial institutions. In this case, the production of the companies is allocated to the financial institution based on either a portfolio-weighted approach or an ownership approach, depending on the asset class. The same logic applies to allocating macroeconomic carbon budgets and the associated decarbonization efforts to the financial institution’s portfolio. More details on these approaches can be found in the PACTA for Banks methodology [here](https://www.transitionmonitor.com/pacta-for-banks-2020/methodology-and-supporting-materials/).] (e.g. a power company). In other words, it is an attempt to distribute the required global decarbonization efforts to those entities acting in the real economy.  
 
-**In the case of High Carbon technologies**, such as coal-fired power generation. The energy scenarios require a decrease or “phase down” in production.
+**In the case of high-carbon technologies**, such as coal-fired power generation, energy scenarios require a decrease or “phase down” in production.
 
-In a hypothetical world, let’s imagine there are 100 MW of coal-fired power production in time 0 ($t_{0}$). In order to keep global temperature rise to 1.5C in the next 5 years ($t_{5}$) this production needs to decrease to 50MW.
+In a hypothetical world, let’s imagine that there are 100 MW of coal-fired power production in time 0 ($t_{0}$). In order to keep global temperature rise to 1.5C in the next 5 years ($t_{5}$) this production needs to decrease to 50MW.
 
-We can set a decarbonization target by using the Technology Market Share Ratio:
+We can set a decarbonization target by using the technology-market-share ratio, 
 
-$$TMSR = \frac{s_{i}(t)}{s_{i}(t_{0})}$$
+$$TMSR = \frac{s_{i}(t)}{s_{i}(t_{0})} ,$$
 
-Where (i) is the technology production (coal-fired power) and (s) is the scenario’s given production.
+where $s_i$ is the scenario’s given production for technology $i$.
 
 In our case:
 
 $$TMSR = \frac{50MW}{100MW} = 0.5$$
-In other words, the ratio of coal-fired power generation in $t_{0}$ to $t_{5}$ is 2:1 or expressed as a percentage point change it needs to decrease by 50% in the next 5 years. 
+In other words, the ratio of coal-fired power generation in $t_{0}$ to $t_{5}$ is 2:1.
 
-We now need to allocate this decarbonization ratio to the microeconomic actor. In this case Power Company A. 
+We now need to allocate this decarbonization ratio to the microeconomic actor., in this case "Power Company A". 
 
 Power Company A has 5 MW of coal-fired power generating capacity - call this ${p_{i}(t_{0})}$
 
@@ -58,23 +58,23 @@ Company A: $p_{i}^{tmsr}(t_{5}) = 2.5MW$
 
 In other words, if Power company A is to be considered aligned with the selected scenario in the next 5 years it needs to decrease its power capacity from 5.0 MW to 2.5 MW. 
 
-Note here that production capacity of the technology is taken as a proxy for a power company’s market share within that technology. Hence the “Technology Market Share".
+Note here that production capacity of the technology is taken as a proxy for a power company’s market share within that technology, hence the name “technology-market-share".
 
-++In the case of Low Carbon technologies++, such as renewable energies, which are currently the smaller market share of the two types of technologies. In other words, the technologies to which the transition needs to be made, to achieve the low carbon economy. In these cases, the scenarios prescribe an increase in their build-out.
+**In the case of low-carbon technologies**, such as renewable energies, energy scenarios require an increase or “phase up” in production. These technologies currently occupy the smaller market-share of the two categories.
 
 In our hypothetical world, let’s imagine there are 50 MW of renewable power in time 0 ($t_{0}$). In order to keep global temperature rise to 1.5C in the next 5 years ($t_{5}$) this production needs to increase to 100MW.
 
-Again, a market share approach is used to distribute these required build-out efforts from the macro (global carbon budget) to the microeconomic actors*. However, in this case, a different approach is used to the one described above.
+Here again we will apply a market-share approach to allocate efforts to the company, however it will differ slightly from the method outlined above. 
 
-For Low Carbon technologies we use a Sector Market Share Percentage (SMSP), whereby the sector (sum of all technologies in the sector) is a proxy for the market share.
+For low-carbon technologies we use the sectoral production (sum of production of all technologies within the sector) as a proxy for the market-share.
 
-We can set a required build-out target using the Sector Market Share Percentage:
+We can set a required build-out target using the so-called sector-market-share percentage,
 
-$$SMSP = \frac{s_{i}(t)-s_{i}(t_{0})}{S(t_{0})}$$
+$$SMSP = \frac{s_{i}(t)-s_{i}(t_{0})}{S(t_{0})} , $$
 
-whereby $s_{i}(t)$ is the low carbon technology at $t_{5}$ - in our case 100MW - and $s_{i}(t_{0})$ is the current low carbon technology from the scenario - in our case 50MW. 
+where $s_{i}(t)$ is the low carbon technology at $t_{5}$ - in our case 100MW - and $s_{i}(t_{0})$ is the current low carbon technology from the scenario - in our case 50MW. 
 
-$S(t_{0})$ is then the current capacity of all technologies in the sector from the scenario.
+$S(t_{0})$ is the current capacity of all technologies in the sector from the scenario.
 
 In our example above this would be at $t_{0}$: 100 MW of coal + 50 MW of renewables. In other words 150 MW of total power capacity, which is assumed to remain constant to $t_{5}$.  
 
@@ -96,27 +96,27 @@ $$p_{i}^{smsp}(t) = {p_{i}(t_{0})}+P(t_{0})*\frac{s_{i}(t)-s_{i}(t_{0})}{S(t_{0}
 
 where ${p_{i}(t_{0})}$ is the company’s current production for renewables and $P(t_{0})$ is the company’s current total power production capacity.
 
-Power Company B’s required renewable capacity build-out for 5 years’ time is therefore:
+Power Company B’s required renewable capacity build-out for 5 years’ time is:
 
 Company B: $p_{i}^{smsp}(t) = 0+5*\frac{100-50}{150} = 1.67MW$
 
 In other words, to be considered aligned with this scenario Company B would have to go from 0 MW of renewables to 1.67 MW in 5 years’ time. 
 
-Power Company C’s required renewable capacity build-out for 5 years’ time is then:
+Power Company C’s required renewable capacity build-out for 5 years’ time is:
 
 Company C: $p_{i}^{smsp}(t) = 1+10*\frac{100-50}{150} = 4.33MW$
 
 In other words, to be considered aligned with this scenario Company C would have to go from 1 MW of renewables to 4.33 MW in 5 years’ time. 
 
-Note here that production capacity of the sector is taken as a proxy for a power company’s market share within that sector. Hence the “Sector Market Share".
+Note here that production capacity of the sector is taken as a proxy for a power company’s market share within that sector, hence the name “sector-market-share".
 
-There are two reasons for the different approaches adopted for high and low carbon technologies:
+There are two reasons for the different approaches adopted for high- and low-carbon technologies:
 
 1)	Need to build out low carbon technologies even if a microeconomic actor doesn’t have them in the current year.
 
-This is the case for Company B. If we were to apply the TMSR whereby the company’s technology capacity is taken as the proxy for its   market-share. Then Company B would not be required to build out any renewables under the TMSR approach as its market share would be equal to  0. In flows that is you multiple 0 by the required rate form the Scenario - we get 0. 
+This is illustrated in our example above by Company B. If we were to apply the TMSR where the company’s technology capacity is taken as the proxy for its   market-share. Then Company B would not be required to build out any renewables under the TMSR approach as its market share would be equal to 0. 
 
-Hence by defining the market share according to the sector’s capacity we can obtain a build-out in low carbon technologies for all micro-economic actors. In the case of Company B, if we consider its coal power production and allocate the scenario’s build-out requirement to Company B via the SMSP we see that Company B must build out 1.67 MW. 
+By defining the market share according to the sector’s capacity we can obtain a build-out in low carbon technologies for all micro-economic actors. In the case of Company B, if we consider its coal power production and allocate the scenario’s build-out requirement to Company B via the SMSP we see that Company B must build out 1.67 MW. 
 
 2)	Need to account for laggards in low carbon technologies. 
 
