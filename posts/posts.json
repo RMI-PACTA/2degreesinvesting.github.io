@@ -14,7 +14,7 @@
       "other"
     ],
     "preview": "posts/2022-01-14-allocating-macroeconomic-carbon-budgets-to-microeconomic-actors/preview.jpg",
-    "last_modified": "2022-01-18T17:28:35+00:00"
+    "last_modified": "2022-01-18T17:31:54+00:00"
   },
   {
     "path": "posts/2021-10-26-defensive-workflow/",
@@ -57,8 +57,8 @@
   },
   {
     "path": "posts/2021-10-18-r2dii-plot-0-2-0/",
-    "title": "r2dii.plot 0.2.0 is now on CRAN",
-    "description": "New styling functions, arguments, and helpers.",
+    "title": "r2dii-plot 0.2.0 is now on CRAN",
+    "description": "New styling functions, new arguments to `plot_*()`, and bug fixes.",
     "author": [
       {
         "name": "Mauro Lepore",
@@ -72,7 +72,7 @@
       "release"
     ],
     "preview": "posts/2021-10-18-r2dii-plot-0-2-0/preview.jpg",
-    "last_modified": "2022-01-18T17:29:02+00:00"
+    "last_modified": "2022-01-18T17:34:30+00:00"
   },
   {
     "path": "posts/2021-06-29-r2dii-data-0-2-0-is-now-on-cran/",
