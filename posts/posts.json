@@ -57,7 +57,7 @@
   },
   {
     "path": "posts/2021-10-18-r2dii-plot-0-2-0/",
-    "title": "r2dii-plot 0.2.0 is now on CRAN",
+    "title": "r2dii.plot 0.2.0 is now on CRAN",
     "description": "New styling functions, new arguments to `plot_*()`, and bug fixes.",
     "author": [
       {
@@ -72,7 +72,7 @@
       "release"
     ],
     "preview": "posts/2021-10-18-r2dii-plot-0-2-0/preview.jpg",
-    "last_modified": "2022-01-18T17:34:30+00:00"
+    "last_modified": "2022-01-18T17:38:02+00:00"
   },
   {
     "path": "posts/2021-06-29-r2dii-data-0-2-0-is-now-on-cran/",

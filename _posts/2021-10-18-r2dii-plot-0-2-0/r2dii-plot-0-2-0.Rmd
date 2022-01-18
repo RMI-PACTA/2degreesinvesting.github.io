@@ -1,5 +1,5 @@
 ---
-title: "r2dii-plot 0.2.0 is now on CRAN"
+title: "r2dii.plot 0.2.0 is now on CRAN"
 description: |
   New styling functions, new arguments to `plot_*()`, and bug fixes.
 author:
