@@ -104,7 +104,7 @@ In other words, to be considered aligned with this scenario Company B would have
 
 Power Company C’s required renewable capacity build-out for 5 years’ time is:
 
-Company C: $p_{i}^{smsp}(t) = 1+10*\frac{100-50}{150} = 4.33MW$
+Company C: $p_{i}^{smsp}(t) = 1+11*\frac{100-50}{150} = 4.33MW$
 
 In other words, to be considered aligned with this scenario Company C would have to go from 1 MW of renewables to 4.33 MW in 5 years’ time. 
 
