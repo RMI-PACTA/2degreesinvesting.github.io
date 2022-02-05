@@ -463,6 +463,23 @@
     "last_modified": "2021-10-18T14:03:47+00:00"
   },
   {
+    "path": "posts/2022-02-04-getting-data-from-the-web/",
+    "title": "Getting data from the web",
+    "description": "What every analyst and developer show know.",
+    "author": [
+      {
+        "name": "Mauro Lepore",
+        "url": "https://github.com/maurolepore"
+      }
+    ],
+    "date": "2000-02-04",
+    "categories": [
+      "draft"
+    ],
+    "preview": "posts/2022-02-04-getting-data-from-the-web/preview.jpg",
+    "last_modified": "2022-02-05T21:58:10+00:00"
+  },
+  {
     "path": "posts/2022-01-14-plotting-the-production-volume-trajectory-plots-for-low-carbon-technologies/",
     "title": "Plotting the Production Volume Trajectory Plots for Low Carbon Technologies",
     "description": "A Practical Guide.",
