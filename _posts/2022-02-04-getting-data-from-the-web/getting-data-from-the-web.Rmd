@@ -58,7 +58,8 @@ github](https://github.com/2DegreesInvesting/ds.webdata), or the [playlist on
 YouTube](https://youtube.com/playlist?list=PLvgdJdJDL-AN_PBkgdD7xgrINsxYUPbwC).
 
 Scraped data for the PASTAX project are becomming available. You can explore and
-download it with the pastax [app](https://twodii.shinyapps.io/pastax/), read the
-[documentation](https://2degreesinvesting.github.io/pastax/reference) on the
-pastax [website](https://2degreesinvesting.github.io/pastax), and use it in R
-with the pastax [package](https://github.com/2DegreesInvesting/pastax).
+download it with the pastax [app](https://twodii.shinyapps.io/pastax-data/),
+read the
+[documentation](https://2degreesinvesting.github.io/pastax.data/reference) on
+the pastax [website](https://2degreesinvesting.github.io/pastax.data), and use
+it in R with the pastax [package](https://github.com/2DegreesInvesting/pastax).
