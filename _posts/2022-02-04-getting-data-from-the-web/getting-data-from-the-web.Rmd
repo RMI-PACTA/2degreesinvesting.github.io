@@ -27,15 +27,26 @@ knitr::opts_chunk$set(echo = FALSE)
 This post follows a series of ds-incubator meetups about getting data from the
 web. It gathers what every developer and analyst should know:
 
-1. The main takeaways.
-2. The resources to learn more about getting data from the web in general.
-3. The resources to learn more about the data for the PASTAX project that is
+1. The resources to learn more about the data for the PASTAX project that is
 becoming available to you.
+2. The resources to learn more about getting data from the web in general.
+3. The main takeaways.
 
 --
 
-You can get data from most websites but the effort varies. The job is easiest
-and most reproducible when:
+Data for the PASTAX project are becomming available. You can explore and
+download it with the [app](https://twodii.shinyapps.io/pastax-data/),
+read its [documentation](https://2degreesinvesting.github.io/pastax.data/reference) on
+the pastax [website](https://2degreesinvesting.github.io/pastax.data), and use
+it in R with the pastax.data [package](https://github.com/2DegreesInvesting/pastax.data).
+
+To learn more about getting data from the web in general see the ds-incubator
+[materials on github](https://github.com/2DegreesInvesting/ds.webdata), or the
+[playlist on
+YouTube](https://youtube.com/playlist?list=PLvgdJdJDL-AN_PBkgdD7xgrINsxYUPbwC).
+
+In short, you can get data from most websites but the effort varies. The job is
+easiest and most reproducible when:
 
 * The website offers an Application Programming Inerface (API).
 * The data has a clear structure, e.g. a table.
@@ -52,14 +63,3 @@ If you lack an API you may still scrape the data but it's genrally harder and
 less reproducible. To scrape data from any website in R you can use the package
 [rvest](https://rvest.tidyverse.org/). Do it
 [ethically](https://towardsdatascience.com/ethics-in-web-scraping-b96b18136f01).
-
-To learn more about getting data from the web see the [materials on
-github](https://github.com/2DegreesInvesting/ds.webdata), or the [playlist on
-YouTube](https://youtube.com/playlist?list=PLvgdJdJDL-AN_PBkgdD7xgrINsxYUPbwC).
-
-Scraped data for the PASTAX project are becomming available. You can explore and
-download it with the pastax [app](https://twodii.shinyapps.io/pastax-data/),
-read the
-[documentation](https://2degreesinvesting.github.io/pastax.data/reference) on
-the pastax [website](https://2degreesinvesting.github.io/pastax.data), and use
-it in R with the pastax [package](https://github.com/2DegreesInvesting/pastax).
