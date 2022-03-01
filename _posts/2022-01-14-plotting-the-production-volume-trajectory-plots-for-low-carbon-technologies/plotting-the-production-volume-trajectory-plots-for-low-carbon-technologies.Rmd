@@ -25,58 +25,61 @@ knitr::opts_chunk$set(
 )
 ```
 
-### Introduction
+## Introduction
 
 The PACTA for banks tool allows for the alignment measurement of a corporate loan book to two types of benchmarks:
 
-1)	**Climate change scenarios** and, 
-2)	**The market, defined as the corporate economy**. Namely, all the assets present for the technology in the asset-based company data (ABCD) set being used for a defined region. 
+1)	**Climate change scenarios** 
+2)	**The market, defined as the corporate economy**, namely all the assets present for the technology in the asset-based company data (ABCD) set for a defined region. 
 
-In the power, oil and gas, coal and automotive sectors a market share allocation rule and trajectory approach to alignment is used. This requires two approaches:
+In the power, oil and gas, coal and automotive sectors a market share allocation rule and a trajectory approach to alignment are used which require two approaches:
 
-1)	Technology Market Share Ratio (TMSR) is used in the case of High Carbon technologies, those required to decrease.
-2)	Sector Market Share Percentage (SMSP) is used in the case of Low Carbon technologies, those required to increase.
+1)	Technology Market Share Ratio (TMSR) in the case of High Carbon technologies, which is those required to decrease.
+2)	Sector Market Share Percentage (SMSP) in the case of Low Carbon technologies, which is those required to increase.
 
-The use of a Sector Market Share Percentage for low carbon technologies requires that a different axis is used to plot the alignment of the loan book to climate scenarios and the alignment of the market (corporate economy) to the same scenarios. This is not the case for high carbon technologies which can be plotted on the same axis. 
+(For methodological details of the two approaches please refer to the blog post: ['Allocating Macroeconomic Carbon Budgets to Microeconomic Actors'](https://2degreesinvesting.github.io/posts/2022-01-14-allocating-macroeconomic-carbon-budgets-to-microeconomic-actors/) by George Harris.)
 
-This blog post will set out the reason for this, as well as explaining the practical steps for how users can use the r2dii suite of packages to accurately: 1) plot the portfolio’s low carbon volume trajectory alignment, and 2) the corporate economy’s low carbon technology alignment, on separate axis. (Plotting for high carbon technologies requires no additional work as it is done with r2dii.plot and plotted in the same graph.) 
+In the current PACTA methodology implementation in the `r2dii.analysis` package the use of a Sector Market Share Percentage (SMSP) for low carbon technologies requires that a different y-axis is used to plot the alignment of the loan book to climate scenarios and the alignment of the market (corporate economy) to the same scenarios. This is not the case for high carbon technologies which can be plotted on the same axis. 
 
-### Part 1) Explanation of the need for 2 graphs for low carbon technologies:
+This blog post will set out the reasons for this (see [Part 1](#Part-1) of this post), as well as explain the practical steps for using the `r2dii` suite of packages to accurately plot low carbon volume trajectory alignment for portfolio and corporate economy (see [Part 2](#Part-2) of this post).
 
-To plot the production volume trajectory plots, 3 inputs are needed. 
-1)	The actual production trajectory of the portfolio
-2)	The alignment target trajectories form the respective scenarios 
-3)	The corporate economy (market benchmark) 
+## Part 1: Explanation of the need for two graphs for low carbon technologies {#Part-1}
 
-When the TMSR is being used i.e. for High carbon technologies, all three of these components can be plotted on the same axis. As (2) the alignment target trajectory from the respective scenarios is the same for both the portfolio and the corporate economy.
+To plot the production volume trajectory plots, 3 inputs are needed: 
 
-However, when the SMSP is being used i.e. for Low Carbon technologies, the actual production trajectory should be plotted in comparison to its alignment target trajectories from the respective scenarios, separately from the corporate economy (market benchmark), which should be plotted against its own set of alignment target trajectories from the respective scenarios. In other words (2) the alignment target trajectory is different for the portfolio and the corporate economy. 
+1)	The actual production trajectory of the portfolio,
+2)	The alignment target trajectories form the respective scenarios,
+3)	The corporate economy (market benchmark) production trajectory.
 
-The reason being, that the portfolio has its own technology market share as a percentage of the sector market share which requires its own set of scenario alignment target trajectories (see SMSP blog). The corporate economy will have a distinctly different technology market share as a percentage of the sector market share (see SMSP blog). Meaning that the corporate economy will require its own set of scenario alignment trajectory targets. In other words, the required build-out in low carbon technologies for the portfolio will be different to the required build out for the corporate economy (see SMSP blog). 
+When the TMSR is being used, i.e. for high carbon technologies, all three of these components can be plotted using the same y-axis as the alignment target trajectory (2) from the respective scenarios is the same for both the portfolio and the corporate economy.
 
-This is not an issue for high carbon technologies (TMSR) as despite the market share of technologies varying between the portfolio and the corporate economy, the ratio derived from the scenario i.e. the required  decrease in production is consistent for both. In other words, the portfolio's and corporate economy's trajectory can be plotted against the same scenario alignment targets. 
+However, when the SMSP is being used, i.e. for low carbon technologies, the portfolio production trajectory should be plotted in comparison to its alignment target trajectories from the respective scenarios (1 and 2 above) but separately from the corporate economy (market benchmark) production trajectory (3 above), which should be plotted against its own set of alignment target trajectories from the respective scenarios. In other words the alignment target trajectories (2) are different for the portfolio and the corporate economy. 
 
-Note that in both cases when it comes to plotting the respective components (portfolio and corporate economy trajectory and scenario alignment targets) all lines are normalized to the start year. Meaning that what is being shown is the (mis)alignment of the portfolio and corporate economies actual trajectories and their respective scenario alignment targets. In other words, it is relative comparison (build-out for low carbon and decrease “phase out” for high carbon) that are being plotted, not absolute figures.
+The reason for this is that the portfolio has its own technology market share as a percentage of its sector market share which requires its own set of scenario alignment target trajectories, and the corporate economy will have a distinctly different technology market share as a percentage of its sector market share (see [this blog post](https://2degreesinvesting.github.io/posts/2022-01-14-allocating-macroeconomic-carbon-budgets-to-microeconomic-actors/) for a detailed explanation of SMSP and TMSR approaches causing this difference). Therefore, the corporate economy will require its own set of scenario alignment trajectory targets and cannot be compared in one plot to the sceneario alignment trajectory targets of the portfolio. 
 
-It follows that the Low Carbon plots, should be read as the portfolio’s mis(alignment) to its targets and the corporate economy’s (mis)alignment to its targets, independently. One could say the “the portfolio is more or less aligned to climate change scenarios than the corporate economy”. 
+This is not an issue for high carbon technologies (using [TMSR approach](https://2degreesinvesting.github.io/posts/2022-01-14-allocating-macroeconomic-carbon-budgets-to-microeconomic-actors/)) as despite the market share of technologies varying between the portfolio and the corporate economy, the ratio derived from the scenario i.e. the required  decrease in production is consistent for both. In other words, the portfolio's and corporate economy's production trajectories can be plotted against the same scenario alignment targets. 
 
-### Part 2) Plotting the volume trajectory plot for low carbon technologies using the r2dii suite of packages:
+Note that in both cases when it comes to plotting the respective components (portfolio and corporate economy trajectory and scenario alignment targets) all lines are normalized to the start year. Meaning that what is being shown is a relative comparison (build-out for low carbon and decrease or “phase out” for high carbon) and not absolute figures.
 
-In practical terms when using the r2dii suite of packages to run and visualize PACTA production volume trajectory plots one should plot the high carbon technologies as follows using the output form r2dii.analysis::target_market_share and the r2dii.plot::plot_trajectory(), (i.e. the portfolio line and corporate economy are given on the same graph). (Please refer to r2dii.plot for more guidance - [here](https://2degreesinvesting.github.io/r2dii.plot/articles/r2dii-plot.html)).
+It follows that the low carbon plots should be read as the portfolio’s mis(alignment) to its targets and the corporate economy’s (mis)alignment to its targets, and those (mis)alignments are visible when analysing the production trajectory line position with respect to scenario target lines' positions. From that one can say that “the portfolio is more or less aligned to climate change scenarios than the corporate economy” based on their position relative to their respective scenario targets. 
 
-However, for the low carbon technologies where the corporate economy and portfolio have their own target scenario trajectories - separate plots should be given. The following process should be followed. 
+## Part 2: Plotting the volume trajectory plot for low carbon technologies using the r2dii suite of packages{#Part-2}
 
-1)	Calculating the portfolio actual trajectory and its respective scenario alignment targets. This is done using the usual workflow from r2dii.analysis. See [here](https://2degreesinvesting.github.io/r2dii.analysis/)
+In practical terms when using the `r2dii` suite of packages to run and visualize PACTA production volume trajectory plots one should plot the high carbon technologies as explained on the [r2dii.plot package website](https://2degreesinvesting.github.io/r2dii.plot/articles/r2dii-plot.html), using the output form `r2dii.analysis::target_market_share` and plotting it using the `r2dii.plot::plot_trajectory()` function, (i.e. the portfolio line and corporate economy are given on the same graph).
 
-2)	Calculating the scenario alignment target for the corporate economy. 
+However, for low carbon technologies where the corporate economy and the portfolio need to have their own target scenario trajectories (see [Part 1](#Part-1) for explanation), separate plots need to be created and a different, less straightforward process needs to be followed than that described in the `r2dii.plot` package documentation. 
 
-Firstly, we need to create a mock loan book with all the companies in the asset-based company data (ABCD) for the sector we want to plot. (Note that we need it for the whole sector i.e., high and low carbon technologies).
+### Steps to obtaining correct volume trajectory charts for low carbon technologies
 
-There is an option here to filter the corporate economy for the desired region. (Note that regions are defined by scenarios and can be found in r2dii.data::region_isos. It is advised that the scenario target region is consistent with the corporate economy - i.e., if you use a European target form the scenarios you should use a European corporate economy. This keeps the analysis consistent. (There maybe use case where you want to do this differently).
+In the following example, we use the sample data from the `r2dii.data` package, but you should use your own data.
 
-We are going to treat this loan book as the corporate economy loan book, i.e. a loan book that has a loan to all companies in the ABCD per region and per sector defined. We do not need financial variables for this. 
+There are two steps needed to correctly displaying volume trajectory data for low carbon technologies:
 
-For the following example, we use the sample data from the r2dii.data package, but you should use your own data.
+#### 1)	Calculating and plotting the portfolio actual trajectory and its respective scenario alignment targets. 
+
+This is done using the usual workflow from `r2dii.analysis`. See [here](https://2degreesinvesting.github.io/r2dii.analysis/) for details.
+
+##### Example
 
 ```{r}
 library(r2dii.data)
@@ -84,116 +87,9 @@ library(r2dii.match)
 library(r2dii.analysis)
 library(r2dii.plot)
 library(tidyverse)
-```
 
-preparation of loan book with companies in power sector
-
-```{r}
-# ABCD_real <- read_csv("….file path to Asset Based Company data….")
-ABCD_demo <- r2dii.data::ald_demo
-```
-
-corporate economy for the power sector only
-
-```{r}
-ABCD <- ABCD_demo %>%
-  filter(sector == "power", 
-         is_ultimate_owner == TRUE)
-```
-
-(optional) corporate economy for specific regions/countries:
-
-```{r, eval = FALSE}
-ABCD_europe <- ABCD %>%
-  filter(technology %in% c("hydrocap", "renewablescap", "nuclearcap", "oilcap", "coalcap", "gascap") &
-           plant_location %in% c("FR","AT","BE","BG","HR","CY","CZ","DK","EE","FI","DE","GR","HU","IE","IT","LV","LT","LU","MT","NL","PL","PT","RO","SK","SI","ES","SE") &
-           is_ultimate_owner == TRUE)
-```
-
-write the names of the companies that you want to include as your corporate economy benchmark
-
-```{r}
-names_for_lbk <- unique(ABCD$name_company)
-```
-
-the following line is a reference for how the loanbook should look
-
-```{r}
 loanbook_demo <- r2dii.data::loanbook_demo
-```
 
-using the loanbook_demo, you can replace the names of the companies for the ones you want to include as your corporate economy benchmark, and change the code for the corresponding sector
-
-```{r}
-loanbook_demo_for_power <- loanbook_demo %>% 
-  slice(1:length(names_for_lbk))
-
-loanbook_demo_for_power$name_direct_loantaker <- names_for_lbk
-loanbook_demo_for_power$name_ultimate_parent <- names_for_lbk
-loanbook_demo_for_power$sector_classification_direct_loantaker <- 3511
-```
-
-read in scenarios
-
-```{r}
-# scenario <- read_csv("….file path to Scenarios….")
-scenario_demo <- r2dii.data::scenario_demo_2020
-```
-
-read in regions
-
-```{r}
-region_demo <- r2dii.data::region_isos_demo
-```
-
-matching
-
-```{r}
-matched_corp_econ <- match_name(loanbook_demo_for_power, ABCD_demo)
-
-lbk_ready <- prioritize(matched_corp_econ) 
-```
-
-generate results 
-
-```{r}
-results_corporate_economy <- lbk_ready %>%
-  target_market_share(ABCD_demo, scenario = scenario_demo, region_isos = region_demo, weight_production = FALSE)
-```
-
-plotting the corporate economy volume trajectory plot for low carbon technologies
-
-```{r}
-data_plot_renewables <- results_corporate_economy %>%
-  filter(
-    technology == "renewablescap",
-    region == "global",
-    scenario_source == "demo_2020",
-    metric != "corporate_economy"
-  ) %>%
-  mutate(
-    label = case_when(
-      metric == "projected" ~ "Corporate Economy",
-      metric == "target_sds" ~ "SDS",
-      metric == "target_sps" ~ "SPS",
-      metric == "target_cps" ~ "CPS",
-      TRUE ~ metric
-    )
-  )
-
-data_plot_renewables %>%
-  plot_trajectory() +
-  labs(
-    title = "Corporate Economy Alignment \n for Renewablescap Technology",
-    x = "Year",
-    y = "Production normalized to start year"
-  ) +
-  scale_linetype_manual(values=c("solid", "solid", "solid", "dashed", "solid"))
-```
-
-plotting the portfolio volume trajectory plot for low carbon technologies
-
-```{r}
 loanbook <- loanbook_demo
 ald <- ald_demo
 scenario <- co2_intensity_scenario_demo
@@ -226,4 +122,125 @@ plot_trajectory(data) +
     x = "Year",
     y = "Production normalized to start year"
   )
+```
+
+#### 2)	Calculating and plotting the scenario alignment target for the corporate economy. 
+
+Firstly, we need to create a mock loan book with all the companies in the asset-based company data (ABCD) for the sector we want to plot. (Note that we need it for the whole sector i.e., high and low carbon technologies). There is an option here to filter the corporate economy for the desired region. (Note that regions are defined by scenarios and can be found in `r2dii.data::region_isos`. It is advised that the scenario target region is consistent with the corporate economy - i.e., if you use a European target form the scenarios you should use a European corporate economy. 
+
+We are going to treat this loan book as the corporate economy loan book, i.e. a loan book that has a loan to all companies in the ABCD per region and per sector defined. We do not need financial variables for this calculation. 
+
+##### Example
+
+```{r}
+library(r2dii.data)
+library(r2dii.match)
+library(r2dii.analysis)
+library(r2dii.plot)
+library(tidyverse)
+```
+
+Prepare the loan book with companies in power sector.
+
+```{r}
+# ABCD_real <- read_csv("….file path to Asset Based Company data….")
+ABCD_demo <- r2dii.data::ald_demo
+```
+
+Corporate economy for the power sector only.
+
+```{r}
+ABCD <- ABCD_demo %>%
+  filter(sector == "power", 
+         is_ultimate_owner == TRUE)
+```
+
+(Optional) corporate economy for specific regions/countries.
+
+```{r, eval = FALSE}
+ABCD_europe <- ABCD %>%
+  filter(technology %in% c("hydrocap", "renewablescap", "nuclearcap", "oilcap", "coalcap", "gascap") &
+           plant_location %in% c("FR","AT","BE","BG","HR","CY","CZ","DK","EE","FI","DE","GR","HU","IE","IT","LV","LT","LU","MT","NL","PL","PT","RO","SK","SI","ES","SE") &
+           is_ultimate_owner == TRUE)
+```
+
+Write the names of the companies that you want to include in your corporate economy benchmark.
+
+```{r}
+names_for_lbk <- unique(ABCD$name_company)
+```
+
+Load your loan book. (The following line is a reference for how the loanbook should look like.)
+
+```{r}
+loanbook_demo <- r2dii.data::loanbook_demo
+```
+
+Using the `loanbook_demo`, you can replace the names of the companies for the ones you want to include as your corporate economy benchmark, and change the code for the corresponding sector
+
+```{r}
+loanbook_demo_for_power <- loanbook_demo %>% 
+  slice(1:length(names_for_lbk))
+
+loanbook_demo_for_power$name_direct_loantaker <- names_for_lbk
+loanbook_demo_for_power$name_ultimate_parent <- names_for_lbk
+loanbook_demo_for_power$sector_classification_direct_loantaker <- 3511
+```
+
+Read in scenarios.
+
+```{r}
+# scenario <- read_csv("….file path to Scenarios….")
+scenario_demo <- r2dii.data::scenario_demo_2020
+```
+
+Read in regions.
+
+```{r}
+region_demo <- r2dii.data::region_isos_demo
+```
+
+Match the data.
+
+```{r}
+matched_corp_econ <- match_name(loanbook_demo_for_power, ABCD_demo)
+
+lbk_ready <- prioritize(matched_corp_econ) 
+```
+
+Generate the results.
+
+```{r}
+results_corporate_economy <- lbk_ready %>%
+  target_market_share(ABCD_demo, scenario = scenario_demo, region_isos = region_demo, weight_production = FALSE)
+```
+
+Plot the corporate economy volume trajectory plot for low carbon technologies.
+
+```{r}
+data_plot_renewables <- results_corporate_economy %>%
+  filter(
+    technology == "renewablescap",
+    region == "global",
+    scenario_source == "demo_2020",
+    metric != "corporate_economy"
+  ) %>%
+  mutate(
+    label = case_when(
+      metric == "projected" ~ "Corporate Economy",
+      metric == "target_sds" ~ "SDS",
+      metric == "target_sps" ~ "SPS",
+      metric == "target_cps" ~ "CPS",
+      TRUE ~ metric
+    )
+  )
+
+data_plot_renewables %>%
+  plot_trajectory() +
+  labs(
+    title = "Corporate Economy Alignment \n for Renewablescap Technology",
+    x = "Year",
+    y = "Production normalized to start year"
+  ) +
+  scale_linetype_manual(values=c("solid", "solid", "solid", "dashed", "solid"))
 ```
