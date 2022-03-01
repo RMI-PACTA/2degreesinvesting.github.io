@@ -6,7 +6,7 @@ author:
   - name: George Harris
     url: https://github.com/georgeharris2deg
 base_url: https://2degreesinvesting.github.io/
-date: 2000-01-14
+date: 2022-01-14
 output: 
   distill::distill_article:
     toc: true
