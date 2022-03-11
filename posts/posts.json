@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2022-03-02-ald-becomes-abcd/",
+    "title": "PACTA Terminology Update: ALD becomes ABCD",
+    "description": "Explaining the decision to change terminology from Asset-Level Data to \nAsset-Based Company Data.",
+    "author": [
+      {
+        "name": "Jackson Hoffart",
+        "url": "https://github.com/jdhoffa"
+      }
+    ],
+    "date": "2022-03-02",
+    "categories": [
+      "methodology"
+    ],
+    "preview": {},
+    "last_modified": "2022-03-11T23:58:13+00:00"
+  },
+  {
     "path": "posts/2022-01-14-allocating-macroeconomic-carbon-budgets-to-microeconomic-actors/",
     "title": "Allocating Macroeconomic Carbon Budgets to Microeconomic Actors",
     "description": "An application of the market-share approach.",
