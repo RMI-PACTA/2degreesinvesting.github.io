@@ -9,9 +9,8 @@
 [1]: I have struggled to build this blog with my usual development
 environment. The docker image provide an older environment that works well.
 
-[2]: The docker image uses a version of CRAN locked in the past. To
-install packages, say "r2dii.data", from the latest version of CRAN with
-something like this:
+[2]: The docker image uses a version of CRAN locked in the past. You can
+install a package, say "r2dii.data", from the latest version of CRAN with:
 
     install.packages("r2dii.data", repos = "https://cran.rstudio.com")
 
