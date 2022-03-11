@@ -10,9 +10,9 @@
 environment. The docker image provide an older environment that works well.
 
 [2]: The docker image uses a version of CRAN locked in the past. To
-install packages from the latest version of CRAN you must specify the
-repository explicitely, e.g.:
+install packages, say "r2dii.data", from the latest version of CRAN with
+something like this:
 
-    install.packages(c("r2dii.data"), repos = "https://cran.rstudio.com")
+    install.packages("r2dii.data", repos = "https://cran.rstudio.com")
 
 
