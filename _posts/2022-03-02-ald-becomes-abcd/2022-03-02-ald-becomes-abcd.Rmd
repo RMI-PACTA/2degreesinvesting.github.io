@@ -14,7 +14,7 @@ output:
   self_contained: true
 categories:
   - methodology
-preview: preview.jpg
+preview: preview.png
 twitter:
   site: "@jdhoffart"
   creator: "@jdhoffart"
