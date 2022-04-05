@@ -1,0 +1,814 @@
+---
+title: "Market Share Target Setting Methodology - Calculation and Plotting"
+description: |
+  A comprehensive explanation of the PACTA market share target setting 
+  methodology, and the associated difficulties when it comes to interpretation 
+  and plotting.
+author:
+  - name: Jackson Hoffart
+    url: https://github.com/jdhoffa
+date: 2022-04-05
+output:
+  distill::distill_article:
+  toc: true
+  toc_depth: 3
+  self_contained: true
+categories:
+  - methodology
+preview: preview.png
+twitter:
+  site: "@jdhoffart"
+  creator: "@jdhoffart"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r setup, echo = FALSE}
+library(dplyr, warn.conflicts = FALSE)
+library(ggplot2)
+library(gt)
+library(r2dii.data)
+library(r2dii.match)
+library(r2dii.analysis)
+library(r2dii.plot)
+```
+
+A core component of the PACTA methodology is the ability to allocate
+macro-economic efforts to micro-economic actors. More specifically,
+PACTA takes climate change mitigation scenarios, which provide
+production pathways for various sectors and technologies, and allocates
+these efforts to individual companies, and/or financial portfolios.
+
+In this note, we will:
+
+-   Discuss PACTA's current target-setting methodology (Technology- and
+    Sector-Market Share)
+-   Explain the rationale and short-comings of the current volume
+    trajectory plots
+-   Propose a new plotting method that aims to address these
+    short-comings.
+
+This note assumes a basic understanding of the PACTA methodology.
+
+# Target-Setting with PACTA
+
+We will use fake data throughout this note to illustrate examples. 
+
+First, let's define a couple of fake climate scenarios. We will need to have an
+example of an increasing scenario, such as renewable energy production (hereby
+referred to as "renewables" or "renewablescap"), and a decreasing scenario, such
+as gas-fired energy production (hereby referred to as "gas" or "gascap").
+
+These scenarios will start at arbitrary values, and have varying degrees
+of ambition.
+
+```{r, echo = FALSE}
+scenario <- tibble::tribble(
+  ~scenario, ~sector,     ~technology,  ~region, ~year,      ~production,             ~tmsr,               ~smsp, ~scenario_source,
+  "CPS", "power",       "gascap", "global", 2020L,             1400,                 1,                   0,      "demo_2020",
+  "CPS", "power", "renewablescap", "global", 2020L,              700,                 1,                   0,      "demo_2020",
+  "CPS", "power",       "gascap", "global", 2025L, 1310.63962986251, 0.936171164187504, -0.0425525572083307,      "demo_2020",
+  "CPS", "power", "renewablescap", "global", 2025L, 891.897536439203,  1.27413933777029,  0.0913797792567632,      "demo_2020",
+  "SDS", "power",       "gascap", "global", 2020L,             1400,                 1,                   0,      "demo_2020",
+  "SDS", "power", "renewablescap", "global", 2020L,              700,                 1,                   0,      "demo_2020",
+  "SDS", "power",       "gascap", "global", 2025L, 1219.60531881441, 0.871146656296007, -0.0859022291359955,      "demo_2020",
+  "SDS", "power", "renewablescap", "global", 2025L, 980.334483101329,   1.4004778330019,   0.133492611000633,      "demo_2020",
+  "SPS", "power",       "gascap", "global", 2020L,             1400,                 1,                   0,      "demo_2020",
+  "SPS", "power", "renewablescap", "global", 2020L,              700,                 1,                   0,      "demo_2020",
+  "SPS", "power",       "gascap", "global", 2025L, 1277.88802941513, 0.912777163867952, -0.0581485574213656,      "demo_2020",
+  "SPS", "power", "renewablescap", "global", 2025L, 921.565888783427,  1.31652269826204,   0.105507566087346,      "demo_2020"
+)
+
+scenario %>% 
+  ggplot(aes(x = year, y = production, colour = scenario)) + 
+  geom_line() + 
+  facet_wrap(~technology) + 
+  ggtitle("Raw Scenario Production Values") + 
+  xlab("Year") + 
+  ylab("Production")
+```
+
+A crucial function of the PACTA methodology is to allocate a portion of the
+scenario production to different companies, and financial portfolios.
+
+To do so, PACTA applies two different methods, depending on if the technology is
+projected to increase (as is the case with low-carbon technologies, such as
+renewables) or if it is projected to decrease (as is the case with
+high-carbon technologies, such as gas).
+
+## High-Carbon Technologies - Technology Market Share
+
+It is straight-forward to calculate the percent-change of any technology's
+production at time $t$, as a percentage of the initial value at $t_0$:
+
+$$\left(\frac{s_i(t)-s_i(t_0)}{s_i(t_0)}\right)*100$$ 
+
+where $s(t)$ is the scenario's production, for some technology, at time $t$.
+
+Note that this reduces to:
+
+$$\left(\frac{s_i(t)}{s_i(t_0)} - 1\right)*100$$ 
+
+For reason's that will become clear later, we will refer to this as the 
+**technology-market share**.
+
+We can transform the scenarios defined above, and plot this value:
+
+```{r, echo = FALSE}
+scenario %>% 
+  mutate(percent_change = (tmsr - 1) * 100) %>% 
+  ggplot(aes(x = year, y = percent_change, colour = scenario)) + 
+  geom_line() + 
+  facet_wrap(~technology) + 
+    ggtitle("Percentage of Initial Technology Production") +
+  xlab("Year") + 
+  ylab("Percent Change")
+```
+
+From this value, we can set a target for a portfolio as:
+
+$$p_i^{target}(t) = p_i(t_0) + p_i(t_0)*\left(\frac{s_i(t)-s_i(t_0)}{s_i(t_0)}\right)$$
+
+where $p_i(t)$ is the portfolio's actual production in technology $i$
+and $p_i^{target}$ is the portfolio's calculated target production.
+
+## Low-Carbon Technologies - Sector Market Share
+
+Rather than calculating the percent change as a percentage of the
+initial technology value, we might also calculate
+
+$$\left(\frac{s(t) - s(t_0)}{S(t_0)}\right)*100$$ where $S(t)$ now
+refers to the scenario's production in the entire sector, at time $t$. We will 
+refer to this as the **sector-market share**. 
+
+Plotting this value yields:
+
+```{r, echo = FALSE}
+scenario %>% 
+  mutate(percent_change = smsp * 100) %>% 
+  ggplot(aes(x = year, y = percent_change, colour = scenario)) + 
+  geom_line() + 
+  facet_wrap(~technology) + 
+  ggtitle("Percentage of Initial Sector Production") +
+  xlab("Year") + 
+  ylab("Percent Change")
+```
+
+Similarly, we can use this value to calculate a target as:
+
+$$p_i^{target}(t) = p_i(t_0) + P(t_0)*\left(\frac{s(t) - s(t_0)}{S(t_0)}\right)$$
+where $P(t_0)$ is the portfolio's production in the entire sector.
+
+# Rationale for Having Two Approaches
+
+This begs the question, why two approaches? We will illustrate with an
+example.
+
+## Technology-Market Share Doesn't Work for Low-Carbon
+
+First, imagine a portfolio that is exposed only to a high-carbon
+technology, such as Gas-fired Power. Lets say that
+$p_{gas}(t_0) = 500MW$ and $p_{renewables}(t_0) = 0MW$.
+
+Imagine we used only the technology-market share to calculate targets.
+The function looks like:
+
+$$
+\begin{aligned}
+ p_i^{target}(t) &= p_i(t_0) + p_i(t_0)*\left(\frac{s_i(t)-s_i(t_0)}{s_i(t_0)}\right) \\
+ &= p_i(t_0) + p_i(t_0)*\left(\frac{s_i(t)}{s_i(t_0)} - 1\right) \\
+ &= p_i(t_0) * \left(\frac{s_i(t)}{s_i(t_0)}\right) \\
+\end{aligned}
+$$
+
+for our gas example, this would become:
+$$p_{gas}^{target}(t) = 500MW * \left(\frac{s_i(t)}{s_i(t_0)}\right)$$
+just the initial gas production, multiplied by the scenario ratio. So
+long as there are non-zero scenario values, there will be a target for
+gas production.
+
+However, for renewable power, since $p_i(t_0) = 0MW$:
+
+$$
+\begin{aligned}
+p_{renewables}^{target}(t) &= 0MW * \left(\frac{s_i(t)}{s_i(t_0)}\right) \\
+&= 0MW
+\end{aligned}
+$$ Since we are multiplying by 0, we will never have a target for
+renewables.
+
+This can be interpreted as follows. The portfolio is only exposed to
+gas, which is a technology expected to decline in production to curb
+climate change. Since the portfolio currently has *NO* market share in
+renewables, it won't be expected to build-out renewables (following the
+technology-market share approach). Thus, a target calculated in this
+method would suggest that a portfolio simply declines it's production
+entirely, without transitioning to low-carbon technologies. This doesn't
+make sense, since eventually the companies would decline production so
+much that they fail.
+
+Now, if we were to use instead the sector market share for renewables,
+we see:
+
+$$
+\begin{aligned}
+p_{renewables}^{target}(t) &= p_{renewables}(t_0) + P(t_0)*\left(\frac{s(t) - s(t_0)}{S(t_0)}\right) \\
+&= 0MW + 500MW * \left(\frac{s(t) - s(t_0)}{S(t_0)}\right)
+\end{aligned}
+$$
+
+Though the portfolio doesn't have any exposure to the renewables
+*technology*, it does have exposure to the power *sector*. Thus, if we
+allocate the desired renewable growth scenario as a percentage of the
+overall *sector*, we will end up with a non-zero target.
+
+## Sector-Market Share Doesn't Work for High-Carbon
+
+The natural question is then, why can't we just apply the sector-market
+share equation to high-carbon technologies?
+
+Let's explore with another example. For now, we will just use the
+equations. In particular, let's explore conditions such that the target
+calculated is negative (note: this should not happen, as it has no
+physical interpretation). If we start with the Sector-Market Share
+equation:
+
+$$p_i^{target}(t) = p_i(t_0) + P(t_0)*\left(\frac{s(t) - s(t_0)}{S(t_0)}\right)$$
+For our negative target boundary-case, this becomes:
+
+$$0 > p_i(t_0) + P(t_0)*\left(\frac{s_i(t) - s_i(t_0)}{S(t_0)}\right)$$
+
+Putting all portfolio-related terms on the LHS, and scenario-related
+terms on the RHS, and handling signs a bit, we get:
+
+$$\frac{p_i(t_0)}{P(t_0)} < \frac{s_i(t_0)-s_i(t)}{S(t_0)}$$ 
+
+It is quite easy to satisfy this condition. Consider the fake scenario we
+defined above:
+
+
+```{r, echo = FALSE}
+scenario %>% 
+  filter(scenario == "SDS") %>% 
+  select(scenario, technology, year, production) %>% 
+  gt() %>% 
+  tab_header(md("**Scenario Production Values**")) %>% 
+  cols_label(
+    year = "Year",
+    production = "Production"
+  )
+  
+```
+
+
+i.e. $ s_{gas}(t_0) = 1400MW$, $s_{gas}(2025) \approx 1220MW$ and $S(t_0) \approx
+2100MW$. Now suppose we have a portfolio that has a small exposure to gas
+production, let's say $10MW$, and a large exposure to renewable production,
+let's say $1000MW$, i.e.. $p_{gas}(t_0) = 10MW$ and $P(t_0) = 1100MW$, then this
+portfolio's gas target becomes:
+
+$$
+\begin{aligned}
+p_{gas}^{target}(t) &= p_{gas}(t_0) + P(t_0)*\left(\frac{s_{gas}(t) - s_{gas}(t_0)}{S(t_0)}\right) \\
+&= 10MW + 1100MW*\left(\frac{1220MW - 1400MW}{2100MW}\right) \\
+&\approx -84.3 MW
+\end{aligned}
+$$
+
+Specific values were chosen to illustrate the point, but as shown, this
+condition can be easily met with arbitrary input values. This is a problem for
+multiple reasons. First, of all, negative production targets have no physical
+interpretation. Second, since there is no physical way to produce "negative"
+energy, we are effectively allocating impossible scenario ambitions. Therefor,
+if we were to continue forward setting targets like this, we would not be
+adequately accounting for the necessary production ramp-down that the scenario
+projects.
+
+Even if we were to just set negative targets to 0, there would be scenario 
+ambition that does not get considered, and our targets would not adequately 
+limit CO2 emissions to the proposed carbon budget. 
+
+# Plotting Results: Volume Trajectory Charts
+
+Now that we have explained the target-setting methodology in detail, we can look
+into what the output of a PACTA run might look like for some arbitrary loanbook.
+For the sake of simplicity, we will assume a loanbook with only one exposure to
+some company that has both Gas and Renewables assets.
+
+
+```{r, echo = FALSE}
+matched <- tibble::tribble(
+  ~id_loan, ~id_direct_loantaker, ~name_direct_loantaker, ~id_intermediate_parent_1, ~name_intermediate_parent_1, ~id_ultimate_parent,    ~name_ultimate_parent, ~loan_size_outstanding, ~loan_size_outstanding_currency, ~loan_size_credit_limit, ~loan_size_credit_limit_currency, ~sector_classification_system, ~sector_classification_input_type, ~sector_classification_direct_loantaker, ~fi_type, ~flag_project_finance_loan, ~name_project, ~lei_direct_loantaker, ~isin_direct_loantaker, ~id_2dii,             ~level, ~sector, ~sector_ald,    ~name, ~name_ald, ~score,    ~source, ~borderline,
+  "L25",               "C281",               "Ypf Sa",                        NA,                          NA,             "UP296", "Viridian Energy Supply",                 266457,                           "EUR",                19376157,                            "EUR",                        "NACE",                            "Code",                                    3511,   "Loan",                       "No",            NA,                    NA,                     NA,  "DL281", "direct_loantaker", "power",     "power", "Ypf Sa",  "ypf sa",      1, "loanbook",       FALSE
+)
+
+out <- matched %>% 
+  target_market_share(ald_demo, select(scenario, -production), region_isos_demo) %>% 
+  filter(region == "global", technology %in% c("gascap", "renewablescap"), year %in% c(2020, 2025))
+
+gt(out) %>% 
+  tab_header(md("**Sample PACTA Output**")) %>% 
+   cols_label(
+    sector = "Sector",
+    technology = "Technology",
+    year = "Year",
+    region = "Region",
+    scenario_source = "Scenario Source",
+    metric = "Metric",
+    production = "Production", 
+    technology_share = "Technology Share"
+  )
+```
+
+
+First, let's just plot the absolute production values:
+
+```{r, echo = FALSE}
+out %>% 
+  filter(metric != "corporate_economy") %>% 
+  ggplot(aes(x = year, y = production, colour = metric)) + 
+  geom_line() + 
+  facet_wrap(~technology) + 
+  ggtitle("Raw Production Values and Targets for Portfolio") + 
+  xlab("Year") + 
+  ylab("Production [MW]")
+```
+
+## Volume Trajectory with Technology-Market Share
+
+Now, let's see what we actually plot in the PACTA volume trajectory
+plots, using `r2dii.plot`, first for a decreasing technology (Gas).
+
+```{r, echo = FALSE}
+out %>%
+  filter(technology == "gascap") %>%
+  qplot_trajectory()
+```
+
+In the above plots, we are simply dividing each production value
+(portfolio, targets and corporate economy) by their initial value at
+2020. Consider first the SDS gas Capacity trend. The actual values are:
+
+
+```{r, echo = FALSE}
+out %>% 
+  filter(technology == "gascap", metric == "target_SDS") %>% 
+  select(year, production) %>% 
+  gt() %>% 
+  tab_header(md("**Absolute Change in Gas Production (SDS Target)**")) %>% 
+  cols_label(
+    year = "Year",
+    production = "Production"
+  )
+  
+```
+
+
+which, normalized, becomes:
+
+
+```{r, echo = FALSE}
+out %>% 
+  filter(technology == "gascap", metric == "target_SDS") %>% 
+  select(year, production) %>% 
+  mutate(production = production/ first(production)) %>% 
+  gt() %>% 
+  tab_header(md("**Normalized Change in Gas Production (SDS Target)**")) %>% 
+  cols_label(
+    year = "Year",
+    production = "Normalized Production"
+  )
+  
+```
+
+
+compare this to the tmsr values of the original scenario:
+
+
+```{r, echo = FALSE}
+scenario %>% 
+  filter(technology == "gascap", scenario == "SDS") %>% 
+  select(year, tmsr) %>% 
+  gt() %>% 
+  tab_header(md("**TMSR Gas Production (SDS)**")) %>% 
+  cols_label(
+    year = "Year",
+    tmsr = "TMSR"
+  )
+```
+
+
+The values are exactly the same. This is expected. For brown
+technologies, we apply the technology market share, which means we
+directly apply the percent growth that the scenario prescribes for the
+technology.
+
+## Volume Trajectory with Sector-Market Share
+
+Now, let's see what the case is for an increasing technology:
+
+```{r, echo = FALSE}
+out %>%
+  filter(technology == "renewablescap") %>%
+  qplot_trajectory()
+```
+
+Looking at the raw target production values (for the SDS scenario), we
+see:
+
+
+```{r, echo = FALSE}
+out %>% 
+  filter(technology == "renewablescap", metric == "target_SDS") %>% 
+  select(year, production) %>% 
+  gt() %>% 
+  tab_header(md("**Absolute Change in Renewables Production (SDS Target)**")) %>% 
+  cols_label(
+    year = "Year",
+    production = "Production"
+  )
+  
+```
+
+
+which, normalized, becomes:
+
+
+```{r, echo= FALSE}
+out %>% 
+  filter(technology == "renewablescap", metric == "target_SDS") %>% 
+  select(year, production) %>% 
+  mutate(production = production/ first(production)) %>% 
+  gt() %>% 
+  tab_header(md("**Normalized Change in Renewables Production (SDS Target)**")) %>% 
+  cols_label(
+    year = "Year",
+    production = "Normalized Production"
+  )
+  
+```
+
+
+compare this to the original scenario:
+
+
+```{r, echo = FALSE}
+scenario %>% 
+  filter(technology == "renewablescap", scenario == "SDS") %>% 
+  select(year, tmsr) %>% 
+  gt() %>% 
+  tab_header(md("**TMSR Renewables Production (SDS)**")) %>% 
+  cols_label(
+    year = "Year",
+    tmsr = "TMSR"
+  )
+```
+
+
+Note here that the percentage change indicated by the trajectory chart
+is different from that of the scenario. That is because we are showing
+the percentage increase as a percentage of the **sector**, not **technology**.
+
+One way we can show this is by calculating the portfolio's initial
+sector exposure:
+
+```{r, echo = FALSE}
+sector_total <- out %>% 
+  filter(metric == "projected", year == 2020) %>% 
+  summarize(sector_total = sum(production)) %>% 
+  pull(sector_total)
+
+sector_total
+```
+
+and determine what the growth is as a percentage of this value:
+
+
+```{r, echo = FALSE}
+out %>% 
+  filter(metric == "target_SDS", technology == "renewablescap") %>% 
+  mutate(percent_change = (production - first(production))/sector_total) %>% 
+  select(year, percent_change) %>% 
+  gt() %>% 
+  tab_header(md("**Growth in Renewables as Percentage of Sector (SDS Target)**")) %>% 
+  cols_label(
+    year = "Year",
+    percent_change = "Growth as Percentage of Sector"
+  )
+  
+```
+
+
+comparing this to the SMSP of the original scenario, we get what we
+expect:
+
+
+```{r, echo = FALSE}
+scenario %>% 
+  filter(technology == "renewablescap", scenario == "SDS") %>% 
+  select(year, smsp) %>% 
+  gt() %>% 
+  tab_header(md("**SMSP Renewables Production (SDS)**")) %>% 
+  cols_label(
+    year = "Year",
+    smsp = "SMSP"
+  )
+```
+
+
+This is just one difficult in interpretation with the current method of 
+plotting. On-top of this, there are actually other more precise problems. 
+
+## Problem 1: Benchmarks for Increasing Technologies
+
+Plotting values as we currently do in `r2dii.plot``, we see a potential issue arise in the
+context of benchmarks. Looking at the equations, what we currently plot (for
+increasing technologies) is:
+
+Actual portfolio production:
+
+$\frac{p_i(t)}{p_i(t_0)}$
+
+Benchmark:
+
+$\frac{p_i^{benchmark}(t)}{p_i^{benchmark}(t_0)}$
+
+Portfolio targets: 
+$$
+\begin{aligned}
+\frac{p_i^{target}(t)}{p_i^{target}(t_0)} &= \frac{p_i(t_0)}{p_i^{target}(t_0)} + \frac{P(t_0)}{p_i^{target}(t_0)}*\left(\frac{s_i(t)-s_i(t_0)}{S(t_0)}\right) \\
+&= 1 + \frac{P(t_0)}{p_i(t_0)}*\left(\frac{s_i(t)-s_i(t_0)}{S(t_0)}\right) 
+\end{aligned}
+$$
+but since $p_i^{target}(t_0) = p_i(t_0)$ by definition:
+
+$$
+\begin{aligned}
+\frac{p_i^{target}(t)}{p_i(t_0)} &= 1 + \frac{P(t_0)}{p_i(t_0)}*\left(\frac{s_i(t)-s_i(t_0)}{S(t_0)}\right) \\
+\end{aligned}
+$$
+
+The problem here is the $P(t_0)$ dependency on the RHS of the target 
+calculations. In particular, let's consider two different cases. In both cases, 
+the benchmark production, and scenario values are constant. Further, the
+portfolio production for some increasing technology, say *renewables*, is also 
+constant. The only differing value is the **overall** production that the portfolio 
+has in the power sector. The proposition is that, in this situation, the 
+benchmark would be plotted in different shaded regions defined by the scenario. 
+
+Let's see this with actual data. Let's define some fake Asset-Based Company Data, 
+and two fake portfolios: 
+``` {r, echo = FALSE}
+lbk_1 <- tibble::tribble(
+  ~id_loan, ~loan_size_outstanding, ~loan_size_outstanding_currency, ~loan_size_credit_limit, ~loan_size_credit_limit_currency, ~id_2dii,            ~level, ~score, ~sector,   ~name_ald, ~sector_ald,
+  "L1",                      1,                           "EUR",                       2,                            "EUR",    "UP1", "ultimate_parent",      1, "power", "company 1",     "power"
+)
+
+lbk_2 <- tibble::tribble(
+  ~id_loan, ~loan_size_outstanding, ~loan_size_outstanding_currency, ~loan_size_credit_limit, ~loan_size_credit_limit_currency, ~id_2dii,            ~level, ~score, ~sector,   ~name_ald, ~sector_ald,
+  "L1",                      1,                           "EUR",                       2,                            "EUR",    "UP1", "ultimate_parent",      1, "power", "company 2",     "power"
+)
+
+ald <- tibble::tribble(
+  ~name_company, ~sector,     ~technology, ~year, ~production, ~plant_location, ~is_ultimate_owner,
+    "company 1", "power", "renewablescap", 2020L,        100L,            "DE",               TRUE,
+    "company 1", "power", "renewablescap", 2025L,        200L,            "DE",               TRUE,
+    "company 2", "power", "renewablescap", 2020L,        100,            "DE",               TRUE,
+    "company 2", "power", "renewablescap", 2025L,        50L,            "DE",               TRUE,
+    "company 2", "power",      "hydrocap", 2020L,      10000L,            "DE",               TRUE,
+    "company 2", "power",      "hydrocap", 2025L,      10000L,            "DE",               TRUE
+  )
+
+ald %>% 
+  select(-c(plant_location, is_ultimate_owner)) %>% 
+  gt() %>% 
+  tab_header(md("**Asset-Based Company Data**")) %>% 
+  cols_label(
+    name_company = "Company",
+    sector = "Sector",
+    technology = "Technology",
+    year = "Year",
+    production = "Production"
+  )
+
+lbk_1 %>% 
+  select(loan_size_outstanding, name_ald, sector_ald) %>% 
+  gt() %>% 
+  tab_header(md("**Fake Portfolio 1**")) %>% 
+  cols_label(
+    loan_size_outstanding = "Loan Size", 
+    name_ald = "Company", 
+    sector_ald = "Sector"
+  )
+
+lbk_2 %>% 
+  select(loan_size_outstanding, name_ald, sector_ald) %>% 
+  gt() %>% 
+  tab_header(md("**Fake Portfolio 2**")) %>% 
+  cols_label(
+    loan_size_outstanding = "Loan Size", 
+    name_ald = "Company", 
+    sector_ald = "Sector"
+  )
+```
+
+
+The only difference between the two companies, is that one has a (very large)
+*hydro* plant, and the other does not. Same for the two portfolios.
+
+Now, let's calculate targets for these portfolios: 
+
+```{r, echo = FALSE}
+out_1 <- target_market_share(lbk_1, ald, scenario_demo_2020, region_isos_demo)
+out_2 <- target_market_share(lbk_2, ald, scenario_demo_2020, region_isos_demo)
+
+out_1 %>%
+  filter(technology == "renewablescap", region == "global") %>%
+  qplot_trajectory()
+
+out_2 %>%
+  filter(technology == "renewablescap", region == "global") %>%
+  qplot_trajectory()
+
+```
+
+It can be seen that, just by virtue of how big the portfolio's production is in
+the sector, the "Corporate Economy" finds itself aligned with two very different
+scenarios. 
+
+## Problem 2: Increasing Technologies with Zero Initial Production
+
+Another large issue arises when the portfolio initially has no production in
+an increasing technology. When using the sector market share percentage,
+we note that a production target may be added for technologies, even if
+no initial production exists for this technology, so long as there is
+exposure to the sector. 
+
+For example, if a portfolio has only gas production, we would expect
+targets to be added for renewables. We could reasonably imagine an
+output dataset that looks like this:
+
+```{r, echo = FALSE}
+no_initial_renewables <- tibble::tribble(
+  ~sector,     ~technology, ~year,  ~region, ~scenario_source,      ~metric, ~production,
+  "power", "renewablescap", 2020L, "global",      "demo_2020",  "projected",          0L,
+  "power", "renewablescap", 2025L, "global",      "demo_2021",  "projected",        100L,
+  "power",       "coalcap", 2020L, "global",      "demo_2022",  "projected",        100L,
+  "power",       "coalcap", 2025L, "global",      "demo_2023",  "projected",         50L,
+  "power", "renewablescap", 2020L, "global",      "demo_2020", "target_SDS",          0L,
+  "power", "renewablescap", 2025L, "global",      "demo_2021", "target_SDS",        200L,
+  "power",       "coalcap", 2020L, "global",      "demo_2022", "target_SDS",        100L,
+  "power",       "coalcap", 2025L, "global",      "demo_2023", "target_SDS",         25L
+)
+
+no_initial_renewables %>% 
+  select(sector, technology, year, metric, production) %>% 
+  gt() %>% 
+  tab_header(md("**SMSP Renewables Production (SDS)**")) %>% 
+  cols_label(
+    sector = "Sector",
+    technology = "Technology",
+    year = "Year",
+    metric = "Metric",
+    production = "Production"
+  )
+
+```
+
+With the current plotting method, we would be trying to plot this value: 
+
+$\frac{p_i(t)}{p_i(t_0)}$
+
+Consider in particular the renewables targets. Since 
+$p_{renewables}(t_0) = 0MW$, we would be trying to divide by 0. Said otherwise, 
+to build out any amount from an initial value of $0MW$ would require an infinite 
+percent growth. 
+
+# Solution: Plot Portfolio-Invariant Units
+
+One possible solution to this problem can be seen if we re-arrange the
+target calculation functions.
+
+For the technology-market share we can express the target function as:
+
+$$\frac{p_i^{target}(t) - p_i(t_0)}{p_i(t_0)} =  \frac{s_i(t)-s_i(t_0)}{s_i(t_0)}$$
+
+and similarly for the sector-market share:
+
+$$\frac{p_i^{target}(t) - p_i(t_0)}{P(t_0)} =  \frac{s_i(t)-s_i(t_0)}{S(t_0)}$$
+
+In both cases, we have collected all portfolio-related values to the LHS
+and scenario related values to the RHS. The common units here, then, are Percent 
+Change in either the Technology
+or Sector.
+
+Let's see how this might address the problems posed above: 
+
+## Problem 1 Solved: Benchmarks for Increasing Technologies
+
+First, let's calculate the output of our two loanbooks (taken from above) and 
+calculate the values above:
+
+```{r, echo = FALSE}
+out_1_solution <- out_1 %>%
+  filter(region == "global") %>% 
+  group_by(metric, technology) %>% 
+  mutate(initial_technology_proudction = first(production)) %>% 
+  group_by(metric, year) %>% 
+  mutate(initial_sector_production = sum(initial_technology_proudction)) %>% 
+  ungroup() %>%
+  mutate(sector_percent_change = 100*(production - initial_technology_proudction)/initial_sector_production) %>% 
+  filter(technology == "renewablescap")
+
+out_2_solution <- out_2 %>%
+  filter(region == "global") %>% 
+  group_by(metric, technology) %>% 
+  mutate(initial_technology_proudction = first(production)) %>% 
+  group_by(metric, year) %>% 
+  mutate(initial_sector_production = sum(initial_technology_proudction)) %>% 
+  ungroup() %>%
+  mutate(sector_percent_change = 100*(production - initial_technology_proudction)/initial_sector_production) %>% 
+  filter(technology == "renewablescap")
+```
+
+``` {r, echo = FALSE}
+out_1_solution %>% 
+  ggplot(aes(x = year, y = sector_percent_change, colour = metric)) + 
+  geom_line() + 
+  facet_wrap(~technology) + 
+  ggtitle("Change as a Percentage of Sector") + 
+  xlab("Year") + 
+  ylab("Percent")
+
+out_2_solution %>% 
+  ggplot(aes(x = year, y = sector_percent_change, colour = metric)) + 
+  geom_line() + 
+  facet_wrap(~technology) + 
+  ggtitle("Change as a Percentage of Sector") + 
+  xlab("Year") + 
+  ylab("Percent")
+  
+```
+
+It is a little bit difficult to see what is going on with the benchmark values, 
+since the portfolio values are messing with the scale, so let's remove them for 
+now: 
+
+``` {r, echo = FALSE}
+out_1_solution %>% 
+  filter(metric != "projected") %>% 
+  ggplot(aes(x = year, y = sector_percent_change, colour = metric)) + 
+  geom_line() + 
+  facet_wrap(~technology) + 
+  ggtitle("Change as a Percentage of Sector") + 
+  xlab("Year") + 
+  ylab("Percent")
+
+out_2_solution %>% 
+  filter(metric != "projected") %>% 
+  ggplot(aes(x = year, y = sector_percent_change, colour = metric)) + 
+  geom_line() + 
+  facet_wrap(~technology) + 
+  ggtitle("Change as a Percentage of Sector") + 
+  xlab("Year") + 
+  ylab("Percent")
+  
+```
+
+We see that the benchmark now consistently falls in the same trajectory in 
+comparison to the targets, for either portfolio. 
+
+## Problem 2 Solved: Increasing Technologies with Zero Initial Production
+
+Similarly, it is straight-forward to show that plotting this value allows us to plot 
+the percent change from a technology that initially starts at $0MW$. The 
+value that we are now plotting is:
+
+$$\frac{p_i(t) - p_i(t_0)}{P(t_0)}$$
+
+It is completely fine that $p_i(t_0) = 0MW$, so long as there is some initial 
+sectoral production, $P(t_0)$. 
+
+For our above example, the plots would look something like this: 
+
+```{r, echo = FALSE}
+out <- no_initial_renewables %>%
+  group_by(metric, technology) %>% 
+  mutate(initial_technology_proudction = first(production)) %>% 
+  group_by(metric, year) %>% 
+  mutate(initial_sector_production = sum(initial_technology_proudction)) %>% 
+  ungroup() %>%
+  mutate(sector_percent_change = 100*(production - initial_technology_proudction)/initial_sector_production)
+
+out %>% 
+  ggplot(aes(x = year, y = sector_percent_change, colour = metric)) + 
+  geom_line() + 
+  facet_wrap(~technology) + 
+  ggtitle("Change as a Percentage of Sector") + 
+  xlab("Year") + 
+  ylab("Percent")
+  
+```
