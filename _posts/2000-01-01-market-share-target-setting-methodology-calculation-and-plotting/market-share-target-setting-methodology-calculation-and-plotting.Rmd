@@ -7,14 +7,13 @@ description: |
 author:
   - name: Jackson Hoffart
     url: https://github.com/jdhoffa
-date: 2022-04-05
+date: 2000-01-01
 output:
-  distill::distill_article:
+  self_contained: true
   toc: true
   toc_depth: 3
-  self_contained: true
+  distill::distill_article:
 categories:
-  - methodology
 preview: preview.png
 twitter:
   site: "@jdhoffart"
