@@ -7,17 +7,18 @@ description: |
 author:
   - name: Jackson Hoffart
     url: https://github.com/jdhoffa
-date: 2000-01-01
-output:
-  self_contained: true
-  toc: true
-  toc_depth: 3
+base_url: https://2degreesinvesting.github.io/
+date: 2022-05-02
+output: 
   distill::distill_article:
-categories:
+    toc: true
+    toc_depth: 3
+    self_contained: true
 preview: preview.png
 twitter:
   site: "@jdhoffart"
   creator: "@jdhoffart"
+draft: true
 ---
 
 
@@ -25,7 +26,7 @@ twitter:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r setup, echo = FALSE}
+```{r packages, echo = FALSE}
 library(dplyr, warn.conflicts = FALSE)
 library(ggplot2)
 library(gt)
