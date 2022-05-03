@@ -14,11 +14,12 @@ output:
     toc: true
     toc_depth: 3
     self_contained: true
+categories:
+  - methodology
 preview: preview.png
 twitter:
   site: "@jdhoffart"
   creator: "@jdhoffart"
-draft: true
 ---
 
 
