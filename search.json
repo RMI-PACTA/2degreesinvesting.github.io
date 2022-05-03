@@ -5,15 +5,15 @@
       "title": "About this blog",
       "description": "Sharing our experience as data scientists at 2DII",
       "author": [],
-      "contents": "\nIn this blog we share our data science experience at 2DII. Here are some of the projects you may read about:\nds-incubator: Weekly meetups to share best practices.\ncoding-helpdesk: Live support by appointment.\nr2dii: A collection of R packages we maintain.\n\n\n\n",
-      "last_modified": "2021-10-18T12:53:25-06:00"
+      "contents": "\nIn this blog we share our data science experience at 2DII. Here are\nsome of the projects you may read about:\nds-incubator:\nWeekly meetups to share best practices.\ncoding-helpdesk:\nLive support by appointment.\nr2dii: A\ncollection of R packages we maintain.\n\n\n\n",
+      "last_modified": "2022-05-03T10:46:13+02:00"
     },
     {
       "path": "index.html",
       "title": "2DII Blog",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2021-10-18T12:53:25-06:00"
+      "last_modified": "2022-05-03T10:46:14+02:00"
     }
   ],
   "collections": ["posts/posts.json"]
