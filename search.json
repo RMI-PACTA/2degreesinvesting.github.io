@@ -6,14 +6,20 @@
       "description": "Sharing our experience as data scientists at 2DII",
       "author": [],
       "contents": "\nIn this blog we share our data science experience at 2DII. Here are\nsome of the projects you may read about:\nds-incubator:\nWeekly meetups to share best practices.\ncoding-helpdesk:\nLive support by appointment.\nr2dii: A\ncollection of R packages we maintain.\n\n\n\n",
-      "last_modified": "2022-05-03T10:46:13+02:00"
+      "last_modified": "2022-05-04T13:56:28-06:00"
     },
     {
       "path": "index.html",
       "title": "2DII Blog",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2022-05-03T10:46:14+02:00"
+      "last_modified": "2022-05-04T13:56:28-06:00"
+    },
+    {
+      "path": "README.html",
+      "author": [],
+      "contents": "\nChecklist to publish a new post\ndocker-compose up1\nAt http://localhost:8787/ login with Username: rstudio Password: 123\nOpen 2degreesinvesting.github.io.Rproj\nKnit ./_posts//.Rmd2\nBuld the website with RStudio or run rmarkdown::render_site(encoding = 'UTF-8')\nenvironment. The docker image provide an older environment that works well.\ninstall a package, say “r2dii.data”, from the latest version of CRAN with:\n\ninstall.packages(\"r2dii.data\", repos = \"https://cran.rstudio.com\")\n1↩\n2↩\n",
+      "last_modified": "2022-03-11T18:04:37-06:00"
     }
   ],
   "collections": ["posts/posts.json"]
