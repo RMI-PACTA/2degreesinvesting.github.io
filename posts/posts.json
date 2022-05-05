@@ -1,5 +1,24 @@
 [
   {
+    "path": "posts/2022-05-05-r2diidata-030-r2diimatch-010-r2diianalysis-020-and-r2diiplot-030-are-now-on-cran/",
+    "title": "r2dii.data 0.3.0, r2dii.match 0.1.0, r2dii.analysis 0.2.0 and r2dii.plot 0.3.0 are now on CRAN",
+    "description": "Bugs squashed, ALD supseded by ABCD and new way of plotting",
+    "author": [
+      {
+        "name": "Jackson Hoffart",
+        "url": "https://github.com/jdhoffa"
+      }
+    ],
+    "date": "2022-05-05",
+    "categories": [
+      "methodology"
+    ],
+    "contents": "\n\nContents\nr2dii.data 0.3.0\nr2dii.match 0.1.0\nr2dii.analysis 0.2.0\nBreaking changes\nNew features\nBug fixes and minor\nenhancements\n\n\nr2dii.data 0.3.0\nNew dataset abcd_demo supersedes the dataset\nald_demo (#279).\nregion_isos gains data for new scenario\nsources: ‘weo_2021’, ‘etp_2020’, ‘geco_2020’ and\n‘geco_2021’.\nregion_isos gains country specific regions for\n‘weo_2019’ and ‘weo_2020’ (#270 @julie-vienne).\nr2dii.match 0.1.0\nNew argument abcd of match_name()\nsupersedes the argument ald (#399).\nr2dii.analysis 0.2.0\nNew argument abcd of\ntarget_market_share() and target_sda\nsupersedes the argument ald (#404).\ntarget_sda() now only outputs data for\nsector values that are in all three input datasets\n(data, ald and\nco2_intensity_scenario) (#390).\ntarget_sda() now outputs unweighted\nemission_factor if by_company is\nTRUE (#376).\ntarget_sda() gains region_isos argument\n(#323).\ntarget_market_share() now only outputs values for\nyears that are in both ald and scenario inputs\n(#394).\ntarget_market_share() now outputs two new columns,\npercentage_of_initial_production_by_scope and\nscope (ADO #4143).\nr2dii.plot 0.3.0\nBreaking changes\nPackage is updated to align with the newest version of\nr2dii.analysis (v 0.1.13).\nqplot_trajectory() now plots the column\n‘percentage_of_initial_production_by_scope’ by default and uses a\npercentage y-scale.\nNew features\nplot_trajectory() gains new parameters:\nvalue_col to indicate which column contains the value to be\nplotted, and perc_y_scale to control whether y-axis should\nbe scaled as percentage.\nBug fixes and minor\nenhancements\nto_title() keeps the word unchanged if all letters\nare uppercase, for example:\nto_title(\"SDS\") = \"SDS\".\nqplot_trajectory() has new labels.\nqplot_techmix() has scenario name in label now\n(#476).\nAll plots now start at the start year of ‘projected’ instead of\nfirst common year for all metrics. This allows for bar removal from\ntechmix plots (#390 @Antoine-Lalechere).\n\n\n\n",
+    "preview": {},
+    "last_modified": "2022-05-05T19:25:33+02:00",
+    "input_file": "r2diidata-030-r2diimatch-010-r2diianalysis-020-and-r2diiplot-030-are-now-on-cran.knit.md"
+  },
+  {
     "path": "posts/2022-05-02-market-share-target-setting-methodology-calculation-and-plotting/",
     "title": "Market Share Target Setting Methodology - Calculation and Plotting",
     "description": "A comprehensive explanation of the PACTA market share target setting \nmethodology, and the associated difficulties when it comes to interpretation \nand plotting.",

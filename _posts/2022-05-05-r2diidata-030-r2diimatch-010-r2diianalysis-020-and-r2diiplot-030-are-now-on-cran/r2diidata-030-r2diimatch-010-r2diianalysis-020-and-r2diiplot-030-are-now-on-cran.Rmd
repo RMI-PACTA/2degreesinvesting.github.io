@@ -1,0 +1,87 @@
+---
+title: "r2dii.data 0.3.0, r2dii.match 0.1.0, r2dii.analysis 0.2.0 and r2dii.plot 0.3.0 are now on CRAN"
+description: |
+  Bugs squashed, ALD supseded by ABCD and new way of plotting
+author:
+  - name: Jackson Hoffart
+    url: https://github.com/jdhoffa
+base_url: https://2degreesinvesting.github.io/
+date: 2022-05-05
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
+    self_contained: true
+categories:
+  - methodology
+preview: preview.png
+twitter:
+  site: "@jdhoffart"
+  creator: "@jdhoffart"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# r2dii.data 0.3.0
+
+* New dataset `abcd_demo` supersedes the dataset `ald_demo` (#279). 
+* `region_isos` gains data for new scenario `source`s: 'weo_2021', 'etp_2020', 
+'geco_2020' and 'geco_2021'.
+* `region_isos` gains country specific regions for 'weo_2019' and 'weo_2020' 
+(#270 @julie-vienne).
+
+# r2dii.match 0.1.0
+
+* New argument `abcd` of `match_name()` supersedes the argument `ald` (#399).
+
+# r2dii.analysis 0.2.0
+
+* New argument `abcd` of `target_market_share()` and `target_sda` supersedes the 
+  argument `ald` (#404).
+
+* `target_sda()` now only outputs data for `sector` values that are in all three 
+  input datasets (`data`, `ald` and `co2_intensity_scenario`) (#390). 
+
+* `target_sda()` now outputs unweighted `emission_factor` if `by_company` is 
+  `TRUE` (#376). 
+
+* `target_sda()` gains `region_isos` argument (#323).
+
+* `target_market_share()` now only outputs values for years that are in both 
+  `ald` and `scenario` inputs (#394). 
+
+* `target_market_share()` now outputs two new columns, `percentage_of_initial_production_by_scope`
+  and `scope` (ADO #4143). 
+  
+  # r2dii.plot 0.3.0
+
+## Breaking changes
+
+* Package is updated to align with the newest version of `r2dii.analysis` 
+(v 0.1.13).
+
+* `qplot_trajectory()` now plots the column 
+'percentage_of_initial_production_by_scope' by default and uses a percentage 
+y-scale.
+
+## New features
+
+* `plot_trajectory()` gains new parameters: `value_col` to indicate which column 
+contains the value to be plotted, and `perc_y_scale` to control whether y-axis 
+should be scaled as percentage.
+
+## Bug fixes and minor enhancements
+
+* `to_title()` keeps the word unchanged if all letters are uppercase, for 
+example: `to_title("SDS") = "SDS"`.
+
+* `qplot_trajectory()` has new labels.
+
+* `qplot_techmix()` has scenario name in label now (#476).
+
+* All plots now start at the start year of 'projected' instead of first common 
+year for all metrics. This allows for bar removal from 
+techmix plots (#390 @Antoine-Lalechere).
