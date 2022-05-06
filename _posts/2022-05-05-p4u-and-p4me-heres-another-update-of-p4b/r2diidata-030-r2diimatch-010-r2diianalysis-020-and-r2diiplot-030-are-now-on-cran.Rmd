@@ -1,0 +1,172 @@
+---
+title: "P4U and P4ME, here's another update of P4B!"
+description: |
+  New terminologies introduced, new plotting methodology, and the `target_sda()` function gets some TLC.
+author:
+  - name: Jackson Hoffart
+    url: https://github.com/jdhoffa
+base_url: https://2degreesinvesting.github.io/
+date: 2022-05-05
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
+    self_contained: true
+categories:
+  - r2dii
+  - methodology
+preview: preview.png
+twitter:
+  site: "@jdhoffart"
+  creator: "@jdhoffart"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+The PACTA team is proud to announce that the latest versions of the `r2dii` 
+suite are now available on CRAN! This update introduced a minor version bump to 
+each of the r2dii packages:  
+
+* r2dii.data 0.3.0
+* r2dii.match 0.1.0
+* r2dii.analysis 0.2.0
+* r2dii.plot 0.3.0
+
+You can install these packages from CRAN with: 
+``` r
+install.packages("r2dii.data")
+# etc. for each of the packages
+```
+
+and load them into an R session using: 
+
+``` {r, include = TRUE, echo = TRUE}
+library(dplyr)
+library(r2dii.data)
+library(r2dii.match)
+library(r2dii.analysis)
+library(r2dii.plot)
+```
+
+# ALD will now be referred to as ABCD
+
+We have updated our internal terminology from Asset-Level Data (ALD), to the 
+more accurate Asset-Based Company Data (ABCD). In the code, this results in the 
+update of `ald -> abcd` in many crucial arguments and datasets. 
+
+In `r2dii.data` this results in the new dataset `abcd_demo`, which is an analog 
+of `ald_demo`:
+
+``` {r, include = TRUE, echo = TRUE}
+abcd_demo
+```
+
+Notice that `ald_demo` can still be used, but will yield a warning. This dataset 
+will be removed in the next release: 
+
+``` {r, include = TRUE, echo = TRUE, warning = TRUE}
+ald_demo
+```
+
+In `r2dii.match` and `r2dii.analysis`, several functions have had the `ald` 
+argument superseded by `abcd`. For example:
+
+``` {r, include = TRUE, echo = TRUE, warning = TRUE}
+# this works
+match_name(loanbook_demo, abcd_demo)
+
+# this also works
+match_name(
+  loanbook = loanbook_demo,
+  abcd = abcd_demo
+)
+
+# this also works, but will throw a warning
+match_name(
+  loanbook = loanbook_demo,
+  ald = abcd_demo # this argument is being deprecated
+)
+```
+
+Similar changes have been made to `target_market_share` and `target_sda`. 
+Please take the time now to make the necessary updates in your code of `ald` to 
+`abcd`, as the former will be fully deprecated by the next release. 
+
+See this blog post for more information: https://2degreesinvesting.github.io/posts/2022-03-02-ald-becomes-abcd/
+
+# New, more consistent way of plotting volume trajectories
+
+In previous iterations of `r2dii`, the value plotted in the volume trajectory 
+charts was simply normalized production. We found several issues with this 
+approach, perhaps the most confusing of which was an issue where corporate 
+economy benchmarks would appear to be aligned with different scenarios, 
+depending on which input loanbook was used. 
+
+This problem has been solved, by plotting the following portfolio-invariant 
+quantities, either the percent change as a percentage of the initial technology 
+(for high-carbon technologies):
+
+$$\frac{p_i^{target}(t) - p_i(t_0)}{p_i(t_0)} =  \frac{s_i(t)-s_i(t_0)}{s_i(t_0)}$$
+
+or as a percentage of the initial sector (for low-carbon technologies):
+
+$$\frac{p_i^{target}(t) - p_i(t_0)}{P(t_0)} =  \frac{s_i(t)-s_i(t_0)}{S(t_0)}$$
+
+The explanation of this decision is very detailed, and can be found here: 
+https://2degreesinvesting.github.io/posts/2022-05-02-market-share-target-setting-methodology-calculation-and-plotting/
+
+## Resulting changes to r2dii.analysis and r2dii.plot
+
+In `r2dii.analysis`, the result is two new columns in the `target_market_share()` 
+output, `scope`, `percentage_of_initial_production_by_scope`: 
+
+``` {r, include = TRUE, echo = TRUE}
+market_share_targets <- loanbook_demo %>% 
+  match_name(ald_demo) %>% 
+  prioritize() %>% 
+  target_market_share(abcd_demo, scenario_demo_2020, region_isos_demo)
+
+select(market_share_targets, technology, scope, percentage_of_initial_production_by_scope)
+```
+
+By default, `r2dii.plot::qplot_trajectory` will now plot these values: 
+
+``` {r, include = TRUE, echo = TRUE}
+data <- market_share_targets %>% filter(
+  sector == "power" &
+    technology == "coalcap" &
+    region == "global" &
+    scenario_source == "demo_2020"
+)
+
+qplot_trajectory(data)
+```
+
+``` {r, include = TRUE, echo = TRUE}
+data <- market_share_targets %>% filter(
+  sector == "power" &
+    technology == "renewablescap" &
+    region == "global" &
+    scenario_source == "demo_2020"
+)
+
+qplot_trajectory(data)
+```
+
+# `target_sda()` gets some love
+
+Finally, some tweaks and enhancements were made to the `target_sda()` function 
+of `r2dii.analysis`, in particular: 
+  * `target_sda()` now only outputs data for `sector` values that are in all three 
+  input datasets (`data`, `ald` and `co2_intensity_scenario`) (#390). 
+  
+  * `target_sda()` now outputs unweighted `emission_factor` if `by_company` is 
+  `TRUE` (#376). 
+  
+  * `target_sda()` gains `region_isos` argument (#323).
+  
+As always, this progress is thanks to the valued contributions from the open 
+source community. 
