@@ -1,5 +1,5 @@
 ---
-title: "P4U and P4ME, here's another update of P4B!"
+title: "Late spring update of the r2dii suite!"
 description: |
   New terminologies introduced, new plotting methodology, and the `target_sda()` function gets some TLC.
 author:
@@ -125,7 +125,7 @@ output, `scope`, `percentage_of_initial_production_by_scope`:
 
 ``` {r, include = TRUE, echo = TRUE}
 market_share_targets <- loanbook_demo %>% 
-  match_name(ald_demo) %>% 
+  match_name(abcd_demo) %>% 
   prioritize() %>% 
   target_market_share(abcd_demo, scenario_demo_2020, region_isos_demo)
 
